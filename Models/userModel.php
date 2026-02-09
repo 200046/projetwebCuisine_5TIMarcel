@@ -112,4 +112,3 @@ function DeleteUser($pdo) {
         die($message);
     }  
 }
-?>
