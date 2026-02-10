@@ -10,7 +10,7 @@
             <div class="border card">
                 <h2 class="center"><?= $recette->recetteTitre ?></h2>
                 <div class="flexible discImageEcole">
-                    <img src="<?= $recette->recetteImage ?>" alt="photo de la recette">
+                    <img src="https://picsum.photos/200/300?random=<?= $recette->recetteImage ?>" alt="photo de la recette">
                 </div>
                 <div class="center">
                     <p><span class=""><?= $recette->recetteDifficulte ?></span> - <span><?= $recette->recetteTempsPreparation ?></span> min, <?= $recette->recetteCategorie ?></p>
