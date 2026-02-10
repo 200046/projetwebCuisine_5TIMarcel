@@ -1,13 +1,3 @@
-<?php if ($uri == '/mesrecettes') : ?>
-    <h1>Vos recettes</h1>
-<?php else : ?>
-    <h1>Recettes partagées par la communauté</h1>
-<?php endif; ?>
-
-<?php if (isset($_SESSION["user"])) : ?>
-    <p><a href="/supprimerrecette?recetteId=<?= $recette->recetteId ?>" class="petitsLiens lienModif">Supprimer la recette</a></p>
-    <p><a href="/modifierrecette?recetteId=<?= $recette->recetteId ?>" class="petitsLiens lienModif">Modifier la recette</a></p>
-<?php endif; ?>
 <div>
     <!-- Note pour les logins de test -->
     <div class="note-test" style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
