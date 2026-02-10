@@ -1,104 +1,117 @@
-USE projetwebcuisine;
-
--- 1. D'abord supprimer les tables qui dépendent de utilisateur
-DROP TABLE IF EXISTS tag_recette;
-DROP TABLE IF EXISTS recette;
-
--- 2. Puis supprimer les autres tables indépendantes
-DROP TABLE IF EXISTS tag;
-DROP TABLE IF EXISTS categorie;
-
--- 3. Enfin supprimer utilisateur
-
-DROP TABLE IF EXISTS utilisateur;
-
--- 4. Maintenant tu peux recréer toutes les tables
 CREATE TABLE utilisateur (
-  id int NOT NULL AUTO_INCREMENT,
-  nomUser varchar(255) NOT NULL,
-  prenomUser varchar(25) NOT NULL,
-  loginUser varchar(25) NOT NULL,
-  passWordUser varchar(25) NOT NULL,
-  role varchar(255) DEFAULT 'user',
-  emailUser varchar(40) DEFAULT NULL,
+  id INT NOT NULL AUTO_INCREMENT,
+  nomUser VARCHAR(255) NOT NULL,
+  prenomUser VARCHAR(25) NOT NULL,
+  loginUser VARCHAR(25) NOT NULL,
+  passWordUser VARCHAR(25) NOT NULL,
+  role VARCHAR(255) DEFAULT 'user',
+  emailUser VARCHAR(40),
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
--- 5. Recréer les autres tables dans l'ordre
+INSERT INTO utilisateur (nomUser, prenomUser, loginUser, passWordUser, role, emailUser) VALUES
+('CELOUMAR', 'ADMIN', 'celoumar', 'celoumar', 'admin', 'celoumar@gmail.com'),
+('MARCELOU', 'USER', 'marcelou', 'marcelou', 'user', 'marcelou@gmail.com'),
+('Dupont', 'Alice', 'alice', 'alice123', 'user', 'alice@gmail.com'),
+('Martin', 'Lucas', 'lucas', 'lucas123', 'user', 'lucas@gmail.com'),
+('Durand', 'Emma', 'emma', 'emma123', 'user', 'emma@gmail.com'),
+('Petit', 'Noah', 'noah', 'noah123', 'user', 'noah@gmail.com'),
+('Robert', 'Lina', 'lina', 'lina123', 'user', 'lina@gmail.com'),
+('Moreau', 'Tom', 'tom', 'tom123', 'user', 'tom@gmail.com'),
+('Fournier', 'Sarah', 'sarah', 'sarah123', 'user', 'sarah@gmail.com'),
+('Girard', 'Leo', 'leo', 'leo123', 'user', 'leo@gmail.com'),
+('Andre', 'Julie', 'julie', 'julie123', 'user', 'julie@gmail.com'),
+('Mercier', 'Max', 'max', 'max123', 'user', 'max@gmail.com'),
+('Blanc', 'Nina', 'nina', 'nina123', 'user', 'nina@gmail.com'),
+('Faure', 'Paul', 'paul', 'paul123', 'user', 'paul@gmail.com'),
+('Roux', 'Eva', 'eva', 'eva123', 'user', 'eva@gmail.com'),
+('Vincent', 'Hugo', 'hugo', 'hugo123', 'user', 'hugo@gmail.com'),
+('Henry', 'Clara', 'clara', 'clara123', 'user', 'clara@gmail.com'),
+('Boyer', 'Ethan', 'ethan', 'ethan123', 'user', 'ethan@gmail.com'),
+('Garnier', 'Lola', 'lola', 'lola123', 'user', 'lola@gmail.com'),
+('Lefevre', 'Nathan', 'nathan', 'nathan123', 'user', 'nathan@gmail.com'),
+('Perez', 'Chloe', 'chloe', 'chloe123', 'user', 'chloe@gmail.com');
 CREATE TABLE categorie (
-  categorieId int NOT NULL AUTO_INCREMENT,
-  nom varchar(255) NOT NULL,
+  categorieId INT NOT NULL AUTO_INCREMENT,
+  nom VARCHAR(255) NOT NULL,
   PRIMARY KEY (categorieId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+INSERT INTO categorie (nom) VALUES
+('Entrée'), ('Plat principal'), ('Dessert'), ('Apéritif'), ('Boisson'), ('Sauce'), ('Accompagnement'), ('Petit-déjeuner'), ('Brunch'), ('Snack'), ('Fast-food'), ('Cuisine du monde'), ('Vegan'), ('Bio'), ('Sans lactose'), ('Pâtisserie'), ('Barbecue'), ('Soupe'), ('Salade'), ('Repas de fête');
 
 CREATE TABLE tag (
-  tagId int NOT NULL AUTO_INCREMENT,
-  nom varchar(255) NOT NULL,
+  tagId INT NOT NULL AUTO_INCREMENT,
+  nom VARCHAR(255) NOT NULL,
   PRIMARY KEY (tagId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
+INSERT INTO tag (nom) VALUES
+('végétarien'), ('végétalien'), ('sans gluten'), ('rapide'), ('économique'), ('healthy'), ('comfort food'), ('épicé'), ('sucré'), ('salé'), ('saison'), ('été'), ('hiver'), ('printemps'), ('automne'), ('français'), ('italien'), ('asiatique'), ('mexicain'), ('oriental');
 CREATE TABLE recette (
-  recetteId int NOT NULL AUTO_INCREMENT,
-  recetteTitre varchar(255) NOT NULL,
-  recetteDescription text,
-  recetteIngredients text NOT NULL,
-  recetteEtapes text NOT NULL,
-  recetteTempsPreparation int NOT NULL,
-  recetteDifficulte varchar(25) NOT NULL,
-  recetteImage varchar(255) DEFAULT NULL,
-  utilisateurId int DEFAULT NULL,
-  categorieId int DEFAULT NULL,
+  recetteId INT NOT NULL AUTO_INCREMENT,
+  recetteTitre VARCHAR(255) NOT NULL,
+  recetteDescription TEXT,
+  recetteIngredients TEXT NOT NULL,
+  recetteEtapes TEXT NOT NULL,
+  recetteTempsPreparation INT NOT NULL,
+  recetteDifficulte VARCHAR(25) NOT NULL,
+  recetteImage VARCHAR(255),
+  utilisateurId INT,
+  categorieId INT,
   PRIMARY KEY (recetteId),
-  KEY utilisateurId (utilisateurId),
-  KEY categorieId (categorieId),
-  CONSTRAINT recette_ibfk_1 FOREIGN KEY (utilisateurId) REFERENCES utilisateur (id),
-  CONSTRAINT recette_ibfk_2 FOREIGN KEY (categorieId) REFERENCES categorie (categorieId)
+  FOREIGN KEY (utilisateurId) REFERENCES utilisateur(id),
+  FOREIGN KEY (categorieId) REFERENCES categorie(categorieId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+INSERT INTO recette 
+(recetteTitre, recetteDescription, recetteIngredients, recetteEtapes, recetteTempsPreparation, recetteDifficulte, utilisateurId, categorieId)
+VALUES
+('Pâtes carbonara', 'Classique italien', 'Pâtes\nLardons\nŒufs\nCrème', 'Cuire les pâtes\nMélanger\nServir', 25, 'facile', 2, 2),
+('Gâteau chocolat', 'Moelleux', 'Chocolat\nBeurre\nŒufs\nSucre', 'Mélanger\nCuire', 40, 'facile', 3, 3),
+('Salade César', 'Fraîche', 'Salade\nPoulet\nParmesan', 'Assembler', 20, 'facile', 4, 19),
+('Quiche lorraine', 'Traditionnelle', 'Œufs\nCrème\nLardons', 'Cuire au four', 50, 'moyen', 5, 2),
+('Smoothie fruits', 'Vitaminé', 'Fruits\nYaourt', 'Mixer', 10, 'facile', 6, 5),
+('Burger maison', 'Gourmand', 'Pain\nSteak\nFromage', 'Assembler', 25, 'facile', 7, 11),
+('Soupe légumes', 'Réconfortante', 'Légumes\nBouillon', 'Cuire\nMixer', 45, 'facile', 8, 18),
+('Pizza maison', 'Personnalisée', 'Pâte\nTomate\nFromage', 'Cuire', 60, 'moyen', 9, 2),
+('Cookies', 'Gourmands', 'Farine\nChocolat', 'Cuire', 30, 'facile', 10, 16),
+('Omelette', 'Rapide', 'Œufs\nFromage', 'Cuire', 10, 'facile', 11, 10),
+('Risotto', 'Crémeux', 'Riz\nBouillon', 'Remuer', 45, 'moyen', 12, 2),
+('Crêpes', 'Sucrées', 'Farine\nLait\nŒufs', 'Cuire', 30, 'facile', 13, 8),
+('Curry légumes', 'Vegan', 'Légumes\nCurry', 'Mijoter', 40, 'moyen', 14, 13),
+('Salade fruits', 'Fraîche', 'Fruits', 'Couper', 15, 'facile', 15, 3),
+('Gratin dauphinois', 'Fondant', 'Pommes de terre\nCrème', 'Cuire', 70, 'moyen', 16, 2),
+('Wrap poulet', 'Lunch', 'Wrap\nPoulet', 'Assembler', 15, 'facile', 17, 10),
+('Muffins', 'Moelleux', 'Farine\nSucre', 'Cuire', 35, 'facile', 18, 16),
+('Chili con carne', 'Épicé', 'Bœuf\nHaricots', 'Mijoter', 60, 'moyen', 19, 12),
+('Tacos', 'Mexicain', 'Tortilla\nBœuf', 'Assembler', 30, 'facile', 20, 11),
+('Soupe miso', 'Asiatique', 'Miso\nTofu', 'Chauffer', 20, 'facile', 2, 18); 
 
 CREATE TABLE tag_recette (
-  tagRecetteId int NOT NULL AUTO_INCREMENT,
-  recetteId int DEFAULT NULL,
-  tagId int DEFAULT NULL,
+  tagRecetteId INT NOT NULL AUTO_INCREMENT,
+  recetteId INT,
+  tagId INT,
   PRIMARY KEY (tagRecetteId),
-  KEY recetteId (recetteId),
-  KEY tagId (tagId),
-  CONSTRAINT tag_recette_ibfk_1 FOREIGN KEY (recetteId) REFERENCES recette (recetteId),
-  CONSTRAINT tag_recette_ibfk_2 FOREIGN KEY (tagId) REFERENCES tag (tagId)
+  FOREIGN KEY (recetteId) REFERENCES recette(recetteId),
+  FOREIGN KEY (tagId) REFERENCES tag(tagId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
--- 6. Insérer les données de base
-INSERT INTO utilisateur (nomUser, prenomUser, loginUser, passWordUser, role, emailUser) 
-VALUES ('Mar', 'Célou', 'celoumar', 'celoumar', 'admin', 'celoumar@gmail.com');
-
-INSERT INTO categorie (nom) VALUES
-('Entrée'),
-('Plat principal'),
-('Dessert'),
-('Apéritif'),
-('Boisson'),
-('Sauce'),
-('Accompagnement');
-
-INSERT INTO tag (nom) VALUES
-('végétarien'),
-('végétalien'),
-('sans gluten'),
-('rapide'),
-('économique'),
-('healthy'),
-('comfort food'),
-('épicé'),
-('sucré'),
-('salé'),
-('saison'),
-('été'),
-('hiver'),
-('printemps'),
-('automne'),
-('français'),
-('italien'),
-('asiatique'),
-('mexicain');
-
-INSERT INTO recette (recetteTitre, recetteDescription, recetteIngredients, recetteEtapes, recetteTempsPreparation, recetteDifficulte, utilisateurId, categorieId) VALUES
-('Soupe de légumes maison', 'Une soupe réconfortante pour les soirées fraîches', '2 carottes\n2 pommes de terre\n1 oignon\n1 litre de bouillon de légumes\nSel, poivre\nPersil frais', '1. Éplucher et couper les légumes en dés\n2. Faire revenir l\'oignon dans un peu d\'huile\n3. Ajouter les carottes et pommes de terre\n4. Verser le bouillon de légumes\n5. Porter à ébullition puis laisser mijoter 30 minutes\n6. Mixer jusqu\'à obtenir la texture souhaitée\n7. Saler, poivrer et ajouter le persil\n8. Servir chaud avec du pain frais', 45, 'facile', 1, 1);
+INSERT INTO tag_recette (recetteId, tagId) VALUES
+(1,17),
+(2,9),
+(3,6),
+(4,16),
+(5,4),
+(6,7),
+(7,13),
+(8,7),
+(9,9),
+(10,4),
+(11,7),
+(12,9),
+(13,2),
+(14,6),
+(15,7),
+(16,4),
+(17,9),
+(18,8),
+(19,19),
+(20,18);
