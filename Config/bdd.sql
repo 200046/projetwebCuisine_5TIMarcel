@@ -61,29 +61,32 @@ CREATE TABLE recette (
   FOREIGN KEY (utilisateurId) REFERENCES utilisateur(id),
   FOREIGN KEY (categorieId) REFERENCES categorie(categorieId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- ... (tables utilisateur, categorie, tag inchangées)
+
 INSERT INTO recette 
-(recetteTitre, recetteDescription, recetteIngredients, recetteEtapes, recetteTempsPreparation, recetteDifficulte, utilisateurId, categorieId)
+(recetteTitre, recetteDescription, recetteIngredients, recetteImage, recetteEtapes, recetteTempsPreparation, recetteDifficulte, utilisateurId, categorieId)
 VALUES
-('Pâtes carbonara', 'Classique italien', 'Pâtes\nLardons\nŒufs\nCrème', 'Cuire les pâtes\nMélanger\nServir', 25, 'facile', 2, 2),
-('Gâteau chocolat', 'Moelleux', 'Chocolat\nBeurre\nŒufs\nSucre', 'Mélanger\nCuire', 40, 'facile', 3, 3),
-('Salade César', 'Fraîche', 'Salade\nPoulet\nParmesan', 'Assembler', 20, 'facile', 4, 19),
-('Quiche lorraine', 'Traditionnelle', 'Œufs\nCrème\nLardons', 'Cuire au four', 50, 'moyen', 5, 2),
-('Smoothie fruits', 'Vitaminé', 'Fruits\nYaourt', 'Mixer', 10, 'facile', 6, 5),
-('Burger maison', 'Gourmand', 'Pain\nSteak\nFromage', 'Assembler', 25, 'facile', 7, 11),
-('Soupe légumes', 'Réconfortante', 'Légumes\nBouillon', 'Cuire\nMixer', 45, 'facile', 8, 18),
-('Pizza maison', 'Personnalisée', 'Pâte\nTomate\nFromage', 'Cuire', 60, 'moyen', 9, 2),
-('Cookies', 'Gourmands', 'Farine\nChocolat', 'Cuire', 30, 'facile', 10, 16),
-('Omelette', 'Rapide', 'Œufs\nFromage', 'Cuire', 10, 'facile', 11, 10),
-('Risotto', 'Crémeux', 'Riz\nBouillon', 'Remuer', 45, 'moyen', 12, 2),
-('Crêpes', 'Sucrées', 'Farine\nLait\nŒufs', 'Cuire', 30, 'facile', 13, 8),
-('Curry légumes', 'Vegan', 'Légumes\nCurry', 'Mijoter', 40, 'moyen', 14, 13),
-('Salade fruits', 'Fraîche', 'Fruits', 'Couper', 15, 'facile', 15, 3),
-('Gratin dauphinois', 'Fondant', 'Pommes de terre\nCrème', 'Cuire', 70, 'moyen', 16, 2),
-('Wrap poulet', 'Lunch', 'Wrap\nPoulet', 'Assembler', 15, 'facile', 17, 10),
-('Muffins', 'Moelleux', 'Farine\nSucre', 'Cuire', 35, 'facile', 18, 16),
-('Chili con carne', 'Épicé', 'Bœuf\nHaricots', 'Mijoter', 60, 'moyen', 19, 12),
-('Tacos', 'Mexicain', 'Tortilla\nBœuf', 'Assembler', 30, 'facile', 20, 11),
-('Soupe miso', 'Asiatique', 'Miso\nTofu', 'Chauffer', 20, 'facile', 2, 18); 
+('Pâtes carbonara', 'Classique italien', 'Pâtes\nLardons\nŒufs\nCrème', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire les pâtes\nMélanger\nServir', 25, 'facile', 2, 2),
+('Gâteau chocolat', 'Moelleux', 'Chocolat\nBeurre\nŒufs\nSucre', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Mélanger\nCuire', 40, 'facile', 3, 3),
+('Salade César', 'Fraîche', 'Salade\nPoulet\nParmesan', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Assembler', 20, 'facile', 4, 19),
+('Quiche lorraine', 'Traditionnelle', 'Œufs\nCrème\nLardons', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire au four', 50, 'moyen', 5, 2),
+('Smoothie fruits', 'Vitaminé', 'Fruits\nYaourt', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Mixer', 10, 'facile', 6, 5),
+('Burger maison', 'Gourmand', 'Pain\nSteak\nFromage', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Assembler', 25, 'facile', 7, 11),
+('Soupe légumes', 'Réconfortante', 'Légumes\nBouillon', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire\nMixer', 45, 'facile', 8, 18),
+('Pizza maison', 'Personnalisée', 'Pâte\nTomate\nFromage', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire', 60, 'moyen', 9, 2),
+('Cookies', 'Gourmands', 'Farine\nChocolat', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire', 30, 'facile', 10, 16),
+('Omelette', 'Rapide', 'Œufs\nFromage', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire', 10, 'facile', 11, 10),
+('Risotto', 'Crémeux', 'Riz\nBouillon', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Remuer', 45, 'moyen', 12, 2),
+('Crêpes', 'Sucrées', 'Farine\nLait\nŒufs', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire', 30, 'facile', 13, 8),
+('Curry légumes', 'Vegan', 'Légumes\nCurry', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Mijoter', 40, 'moyen', 14, 13),
+('Salade fruits', 'Fraîche', 'Fruits', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Couper', 15, 'facile', 15, 3),
+('Gratin dauphinois', 'Fondant', 'Pommes de terre\nCrème', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire', 70, 'moyen', 16, 2),
+('Wrap poulet', 'Lunch', 'Wrap\nPoulet', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Assembler', 15, 'facile', 17, 10),
+('Muffins', 'Moelleux', 'Farine\nSucre', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire', 35, 'facile', 18, 16),
+('Chili con carne', 'Épicé', 'Bœuf\nHaricots', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Mijoter', 60, 'moyen', 19, 12),
+('Tacos', 'Mexicain', 'Tortilla\nBœuf', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Assembler', 30, 'facile', 20, 11),
+('Soupe miso', 'Asiatique', 'Miso\nTofu', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Chauffer', 20, 'facile', 2, 18);
 
 CREATE TABLE tag_recette (
   tagRecetteId INT NOT NULL AUTO_INCREMENT,
