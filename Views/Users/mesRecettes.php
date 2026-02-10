@@ -1,9 +1,3 @@
-<?php if ($uri == '/mesRecettes') : ?>
-    <h1>Vos recettes</h1>
-<?php else : ?>
-    <h1>Recettes partagées par la communauté</h1>
-<?php endif; ?>
-
 <?php if (isset($_SESSION["user"])) : ?>
     <a href="/creerrecette">Ajouter une recette</a>
 <?php endif; ?>

@@ -41,14 +41,6 @@ function deleteAllRecettesFromUser($pdo) {
         die($message);
     }
 }
-
-/**
- * Fonction selectMyRecettes
- * -----------------------
- * BUT : Récupérer les recettes de l'utilisateur connecté
- * IN : $pdo - connexion à la base de données
- * OUT : les recettes de l'utilisateur
- */
 function selectMyRecettes($pdo)
 {
     try {
@@ -64,14 +56,6 @@ function selectMyRecettes($pdo)
         die($message);
     }
 }
-
-/**
- * Fonction selectAllCategories
- * --------------------------
- * BUT : Récupérer toutes les catégories de recettes
- * IN : $pdo - connexion à la base de données
- * OUT : toutes les catégories
- */
 function selectAllCategories($pdo)
 {
     try {
@@ -86,13 +70,6 @@ function selectAllCategories($pdo)
     }
 }
 
-/**
- * Fonction selectAllTags
- * --------------------------
- * BUT : Récupérer tous les tags disponibles
- * IN : $pdo - connexion à la base de données
- * OUT : tous les tags
- */
 function selectAllTags($pdo)
 {
     try {
@@ -107,13 +84,6 @@ function selectAllTags($pdo)
     }
 }
 
-/**
- * Fonction selectOneRecette
- * ------------------------
- * BUT : Récupérer une recette spécifique
- * IN : $pdo - connexion à la base de données
- * OUT : les informations de la recette
- */
 function selectOneRecette($pdo)
 {
     try {
@@ -130,13 +100,6 @@ function selectOneRecette($pdo)
     }
 }
 
-/**
- * Fonction selectTagsActiveRecette
- * ---------------------------------
- * BUT : Récupérer les tags d'une recette spécifique
- * IN : $pdo - connexion à la base de données
- * OUT : les tags de la recette
- */
 function selectTagsActiveRecette($pdo)
 {
     try {
@@ -153,12 +116,6 @@ function selectTagsActiveRecette($pdo)
     }
 }
 
-/**
- * Fonction updateRecette
- * ----------------------
- * BUT : Mettre à jour une recette
- * IN : $dbh - connexion à la base de données
- */
 function updateRecette($dbh)
 {
     try {
@@ -191,12 +148,6 @@ function updateRecette($dbh)
     }
 }
 
-/**
- * Fonction deleteTagsRecette
- * ---------------------------
- * BUT : Supprimer les tags d'une recette
- * IN : $dbh - connexion à la base de données
- */
 function deleteTagsRecette($dbh, $recetteId)
 {
     try {
@@ -223,12 +174,7 @@ function deleteOneRecette($pdo)
         die($message);
     }
 }
-/**
- * Fonction ajouterTagsRecette
- * ---------------------------
- * BUT : Ajouter un tag à une recette
- * IN : $pdo - connexion, $recetteId - ID recette, $tagId - ID tag
- */
+
 function ajouterTagsRecette($pdo, $recetteId, $tagId)
 {
     try {
