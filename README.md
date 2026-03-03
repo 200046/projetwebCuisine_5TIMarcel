@@ -20,3 +20,6 @@ L'objectif pédagogique est de maîtriser le **CRUD** (Create, Read, Update, Del
 - 📖 **Catalogue** : Consultation de toutes les recettes avec affichage par catégorie.
 - ✍️ **Gestion (CRUD)** : Ajouter, modifier et supprimer ses recettes.
 - 📱 **Responsive** : Interface adaptée aux mobiles et tablettes.
+
+
+_Provient de google le readme !_
