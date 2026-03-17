@@ -297,3 +297,53 @@ function ajouterTagsRecette($pdo, $recetteId, $tagId) {
         die($message);
     }
 }
+
+// -----------------------------
+// Ajouter une nouvelle recette
+// -----------------------------
+function insertRecette($pdo) {
+    try {
+        $query = 'INSERT INTO recette (
+                    recetteTitre, 
+                    recetteDescription, 
+                    recetteIngredients, 
+                    recetteEtapes, 
+                    recetteTempsPreparation, 
+                    recetteDifficulte, 
+                    recetteCategorieId, 
+                    recetteImage,
+                    utilisateurId
+                  ) VALUES (
+                    :titre, 
+                    :description, 
+                    :ingredients, 
+                    :etapes, 
+                    :temps_preparation, 
+                    :difficulte, 
+                    :categorieId, 
+                    :image,
+                    :utilisateurId
+                  )';
+
+        $insertRecette = $pdo->prepare($query);
+
+        $insertRecette->execute([
+            'titre' => $_POST["titre"],
+            'description' => $_POST["description"],
+            'ingredients' => $_POST["ingredients"],
+            'etapes' => $_POST["etapes"],
+            'temps_preparation' => $_POST["temps_preparation"],
+            'difficulte' => $_POST["difficulte"],
+            'categorieId' => $_POST["categorieId"],
+            'image' => $_POST["image"],
+            'utilisateurId' => $_SESSION["utilisateur"]->id
+        ]);
+
+        // Retourner l'ID de la nouvelle recette insérée
+        return $pdo->lastInsertId();
+
+    } catch (PDOException $e) {
+        $message = $e->getMessage();
+        die($message);
+    }
+}
