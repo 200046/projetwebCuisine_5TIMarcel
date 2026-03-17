@@ -1,4 +1,4 @@
-<?php if (isset($_SESSION["user"])) : ?>
+<?php if (isset($_SESSION["utilisateur"])) : ?>
     <a href="/creerRecette" class="btn btn-primary mb-3">Ajouter une recette</a>
 <?php endif; ?>
 
@@ -16,7 +16,7 @@ if (!$recettes) {
     <?php foreach ($recettes as $recette) : ?>
         <?php
         // Vérifie que la recette appartient à l'utilisateur connecté
-        if (!isset($_SESSION["user"]) || (int)$recette->utilisateurId !== (int)$_SESSION["user"]->id) {
+        if (!isset($_SESSION["utilisateur"]) || (int)$recette->utilisateurId !== (int)$_SESSION["utilisateur"]->id) {
             continue;
         }
         ?>

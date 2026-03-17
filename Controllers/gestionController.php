@@ -20,7 +20,7 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
     | Si l'utilisateur n'est pas connecté (aucune session), on le redirige
     | vers la page de connexion.
     */
-    if (!isset($_SESSION["user"])) {
+    if (!isset($_SESSION["utilisateur"])) {
         header("Location: /connexion");
         exit();
     }
@@ -35,7 +35,7 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
     | l'utilisateur connecté possède le rôle "admin".
     | Si ce n'est pas le cas, on affiche une page d'erreur.
     */
-    if (!verifAdmin($pdo, $_SESSION["user"]->id)) {
+    if (!verifAdmin($pdo, $_SESSION["utilisateur"]->id)) {
         $error = "Accès non autorisé. Vous devez être administrateur.";
         $template = "Views/Gestion/error.php";
         require_once("Views/base.php");
@@ -76,7 +76,7 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
         | Cela évite qu'un administrateur bloque accidentellement
         | son propre compte.
         */
-        if ($id == $_SESSION["user"]->id) {
+        if ($id == $_SESSION["utilisateur"]->id) {
             $message = "Vous ne pouvez pas suspendre votre propre compte";
             $messageType = "error";
         } else {
@@ -187,7 +187,7 @@ elseif ($uri === "/moderation") {
     | Vérification que l'utilisateur est connecté
     |--------------------------------------------------------------------------
     */
-    if (!isset($_SESSION["user"])) {
+    if (!isset($_SESSION["utilisateur"])) {
         header("Location: /connexion");
         exit();
     }
@@ -199,7 +199,7 @@ elseif ($uri === "/moderation") {
     | Seuls les modérateurs et administrateurs peuvent accéder
     | à cette page. Sinon redirection vers l'accueil.
     */
-    if ($_SESSION["user"]->role !== 'moderateur' && $_SESSION["user"]->role !== 'admin') {
+    if ($_SESSION["utilisateur"]->role !== 'moderateur' && $_SESSION["utilisateur"]->role !== 'admin') {
         header("Location: /");
         exit();
     }

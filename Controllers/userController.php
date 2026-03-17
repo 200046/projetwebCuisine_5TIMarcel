@@ -1,6 +1,5 @@
 <?php
 require_once("Models/userModel.php");
-require_once("Models/userModel.php");
 
 // Récupération du chemin désiré
 $uri = $_SERVER["REQUEST_URI"];
@@ -8,7 +7,6 @@ $uri = $_SERVER["REQUEST_URI"];
 if ($uri === "/connexion") {
    if (isset($_POST['btnEnvoi'])) {
       $result = connectUser($pdo);
-      
       if ($result === true) {
          // Redirection vers la page d'accueil
          header("location:/");
@@ -48,7 +46,7 @@ if ($uri === "/connexion") {
          exit();
       }
    }
-   if (isset($_POST['btnDelete']) && isset($_SESSION['user'])) {
+   if (isset($_POST['btnDelete']) && isset($_SESSION['utilisateur'])) {
       deleteUser($pdo);
       header("location:/confirmDeleteUser");
       exit();
@@ -56,14 +54,12 @@ if ($uri === "/connexion") {
    $title = "Mon profil";
    $template = "Views/Users/InscriptionOrEditProfile.php";
    require_once("Views/base.php");
-}
-elseif ($uri === "/confirmDeleteUser") {
-    $title = "Page d'accueil";
-    $template = "Views/Users/confirmDeleteUser.php";
-    require_once("Views/base.php");
-}
-elseif ($uri === "/ban") {
-    $title = "Compte suspendu";
-    $template = "Views/Users/ban.php";
-    require_once("Views/base.php");
+} elseif ($uri === "/confirmDeleteUser") {
+   $title = "Page d'accueil";
+   $template = "Views/Users/confirmDeleteUser.php";
+   require_once("Views/base.php");
+} elseif ($uri === "/ban") {
+   $title = "Compte suspendu";
+   $template = "Views/Users/ban.php";
+   require_once("Views/base.php");
 }

@@ -69,15 +69,11 @@ elseif ($uri === "/creerRecette") {
     // Message de confirmation après création
     $messageSuccess = null;
 
-    // Vérifie si le formulaire a été envoyé
     if (isset($_POST["btnEnvoi"])) {
-
-        // Insertion de la recette dans la base de données
-        $recetteId = insertRecette($pdo);
-
-        // Message affiché après succès
-        $messageSuccess = "Recette créée avec succès !";
-    }
+    $recetteId = insertRecette($pdo);
+    header("Location: /");
+    exit();
+}
 
     // Récupération des catégories disponibles
     $categories = selectAllCategories($pdo);
@@ -110,23 +106,16 @@ elseif ($uri === "/creerRecette") {
 | - les données de la recette
 | - les tags associés à la recette
 */
-elseif (isset($_GET["recetteId"]) && strpos($uri, "/voirRecette") === 0) {
+elseif (isset($_GET["recetteId"]) && str_starts_with($uri, "/voirrecette")) {
 
-    // Récupération des informations de la recette
     $recette = selectOneRecette($pdo);
-
-    // Récupération des tags associés à cette recette
     $tags = selectTagsActiveRecette($pdo);
 
-    // Titre de la page
     $title = "Détails de la recette";
-
-    // Vue utilisée pour afficher les détails
     $template = "Views/Recettes/voirRecette.php";
-
-    // Chargement du template principal
     require_once "Views/base.php";
 }
+
 
 
 /*

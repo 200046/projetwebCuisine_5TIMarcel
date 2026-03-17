@@ -39,7 +39,7 @@ function connectUser($pdo) {
             return "suspendu";
         }
         
-        $_SESSION["user"] = $user;
+        $_SESSION["utilisateur"] = $user;
         return true;
 
     } catch (PDOException $e) {
@@ -110,7 +110,7 @@ function updateUser($pdo) {
             'prenomUser' => $_POST["prenom"],
             'emailUser' => $_POST["email"],
             'passWordUser' => $_POST["mot_de_passe"],
-            'id' => $_SESSION["user"]->id
+            'id' => $_SESSION["utilisateur"]->id
         ]);
 
     } catch (PDOException $e) {
@@ -134,12 +134,12 @@ function updateSession($pdo) {
         $selectUser = $pdo->prepare($query);
 
         $selectUser->execute([
-            'id' => $_SESSION["user"]->id
+            'id' => $_SESSION["utilisateur"]->id
         ]);
 
         $user = $selectUser->fetch(PDO::FETCH_OBJ);
 
-        $_SESSION["user"] = $user;
+        $_SESSION["utilisateur"] = $user;
 
     } catch (PDOException $e) {
 
@@ -158,7 +158,7 @@ function deleteUser($pdo) {
 
     try {
 
-        $id = $_SESSION["user"]->id;
+        $id = $_SESSION["utilisateur"]->id;
 
         // Supprimer les tags liés aux recettes de l'utilisateur
         $queryTags = 'DELETE tag_recette 

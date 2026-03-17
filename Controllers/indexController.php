@@ -17,10 +17,10 @@ $uri = $_SERVER["REQUEST_URI"];
 |
 | Cela empêche un utilisateur suspendu d'utiliser le site.
 */
-if (isset($_SESSION["user"])) {
+if (isset($_SESSION["utilisateur"])) {
 
     // Récupération du statut de suspension dans la base de données
-    $statut = getStatutSuspension($pdo, $_SESSION["user"]->id);
+    $statut = getStatutSuspension($pdo, $_SESSION["utilisateur"]->id);
 
     // Si l'utilisateur est suspendu
     if ($statut == 1) {
@@ -51,13 +51,10 @@ if (isset($_SESSION["user"])) {
 | - on récupère toutes les recettes de la base de données
 | - on charge la vue de la page d'accueil
 */
-if ($uri === "/index"  || $uri === "/index.php" || $uri === "/") {
-    // Récupération de toutes les recettes enregistrées
+
+if ($uri === "/" || $uri === "/index" || $uri === "/index.php") {
     $recettes = selectAllRecettes($pdo);
-    // Titre de la page
     $title = "Page d'accueil";
-    // Fichier de vue utilisé pour afficher la page
     $template = "Views/pageAccueil.php";
-    // Chargement du template principal
-    require_once("Views/base.php");
+    require_once "Views/base.php";
 }

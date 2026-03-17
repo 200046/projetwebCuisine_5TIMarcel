@@ -4,7 +4,7 @@
     <div class="admin-header">
         <h1>Administration</h1>
         <div class="user-info">
-            <span>Connecté en tant que : <strong><?= $_SESSION["user"]->prenomUser ?> <?= $_SESSION["user"]->nomUser ?></strong> (Admin)</span>
+            <span>Connecté en tant que : <strong><?= $_SESSION["utilisateur"]->prenomUser ?> <?= $_SESSION["utilisateur"]->nomUser ?></strong> (Admin)</span>
         </div>
     </div>
 
@@ -58,7 +58,7 @@
                             <?php endif; ?>
                         </td>
                         <td class="actions">
-                            <?php if ($user->id != $_SESSION["user"]->id): ?>
+                            <?php if ($user->id != $_SESSION["utilisateur"]->id): ?>
                                 <?php if ($data['estSuspendu']): ?>
                                     <a href="?action=reactiver&id=<?= $user->id ?>" class="btn-reactiv">Réactiver</a>
                                 <?php else: ?>

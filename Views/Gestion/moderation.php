@@ -3,7 +3,7 @@
     <div class="admin-header">
         <h1>Modération</h1>
         <div class="user-info">
-            <span>Connecté en tant que : <strong><?= $_SESSION["user"]->prenomUser ?> <?= $_SESSION["user"]->nomUser ?></strong> (Modérateur)</span>
+            <span>Connecté en tant que : <strong><?= $_SESSION["utilisateur"]->prenomUser ?> <?= $_SESSION["utilisateur"]->nomUser ?></strong> (Modérateur)</span>
         </div>
     </div>
 
