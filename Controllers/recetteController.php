@@ -172,30 +172,20 @@ if ($uri === "/mesRecettes") {
 |    - suppression de la recette
 */ elseif (isset($_GET["recetteId"]) && strpos($uri, "/supprimerRecette") === 0) {
 
-    // Récupération de la recette à supprimer
-    $recette = selectOneRecette($pdo, (int)$_GET["recetteId"]);
+    $recette = selectOneRecette($pdo);
 
     $messageSuccess = null;
 
-    // Vérifie si l'utilisateur confirme la suppression
     if (isset($_POST['confirmerSuppression'])) {
 
-        // Suppression des tags liés à la recette
         deleteTagsRecette($pdo, (int)$_GET["recetteId"]);
+        deleteOneRecette($pdo);
 
-        // Suppression de la recette dans la base de données
-        deleteOneRecette($pdo, (int)$_GET["recetteId"]);
-
-        // Message de confirmation
-        $messageSuccess = "Recette supprimée avec succès !";
+        header("Location: /mesRecettes");
+        exit();
     }
 
-    // Titre de la page
     $title = "Supprimer une recette";
-
-    // Vue de confirmation de suppression
     $template = "Views/Recettes/supprimerRecette.php";
-
-    // Chargement du template principal
     require_once "Views/base.php";
 }
