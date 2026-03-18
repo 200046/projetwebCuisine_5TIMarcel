@@ -11,45 +11,6 @@ body {
     text-align: center;
 }
 
-/* ===== EN-TÊTE ===== */
-header {
-    background: #ffffff;
-    /* Header blanc pour la clarté */
-    padding: 15px 0;
-    position: sticky;
-    /* Reste en haut au scroll */
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    /* Plus propre que les marges */
-    margin: 0;
-    padding: 0;
-}
-
-nav ul li a {
-    color: #444;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 8px 20px;
-    border-radius: 50px;
-    /* Boutons pillule */
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-nav ul li a:hover {
-    background-color: #ff6b35;
-    color: white;
-    transform: translateY(-2px);
-}
-
 /* ===== TITRES ===== */
 h1 {
     color: #ff6b35;
@@ -186,26 +147,6 @@ input:focus {
     background: white;
     border-color: #ff6b35;
     box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
-}
-
-/* ===== FOOTER ===== */
-footer {
-    background: #1a1a1a;
-    color: #999;
-    padding: 60px 20px;
-    border-radius: 40px 40px 0 0;
-    /* Effet de courbe moderne */
-}
-
-footer a {
-    color: #fff;
-    border-bottom: 2px solid #ff6b35;
-    transition: 0.3s;
-}
-
-footer a:hover {
-    color: #ff6b35;
-    text-decoration: none;
 }
 
 /* ===== CLASSES UTILES ===== */
