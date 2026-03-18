@@ -50,24 +50,3 @@
     </form>
   
 </div>
-
-<!-- Ajout du CSS pour les alertes si tu ne l'as pas déjà -->
-<style>
-.alert {
-    padding: 15px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    width: 100%;
-    max-width: 500px;
-}
-
-.alert-danger {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
-}
-
-.mt-4 {
-    margin-top: 20px;
-}
-</style>
