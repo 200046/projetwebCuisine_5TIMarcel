@@ -134,24 +134,15 @@ elseif (isset($_GET["recetteId"]) && strpos($uri, "/modifierRecette") === 0) {
 
     $messageSuccess = null;
 
-    // Récupération des données actuelles de la recette
+    // On récupère la recette EN PREMIER (avant le traitement du POST)
     $recette = selectOneRecette($pdo);
+    $tagsActiveRecette = selectTagsActiveRecette($pdo);
+    $tags = selectAllTags($pdo);
+    $categories = selectAllCategories($pdo);
 
     if (isset($_POST['btnEnvoi'])) {
 
-        // On fusionne : on garde les valeurs actuelles si le champ POST est vide
-        $data = [
-            'titre'            => !empty($_POST['titre'])            ? $_POST['titre']            : $recette->recetteTitre,
-            'description'      => !empty($_POST['description'])      ? $_POST['description']      : $recette->recetteDescription,
-            'ingredients'      => !empty($_POST['ingredients'])      ? $_POST['ingredients']      : $recette->recetteIngredients,
-            'etapes'           => !empty($_POST['etapes'])           ? $_POST['etapes']           : $recette->recetteEtapes,
-            'temps_preparation'=> !empty($_POST['temps_preparation'])? $_POST['temps_preparation']: $recette->recetteTempsPreparation,
-            'difficulte'       => !empty($_POST['difficulte'])       ? $_POST['difficulte']       : $recette->recetteDifficulte,
-            'categorieId'      => !empty($_POST['categorieId'])      ? $_POST['categorieId']      : $recette->categorieId,
-            'image'            => !empty($_POST['image'])            ? $_POST['image']            : $recette->recetteImage,
-        ];
-
-        updateRecette($pdo, (int)$_GET["recetteId"], $data);
+        updateRecette($pdo);
 
         deleteTagsRecette($pdo, (int)$_GET["recetteId"]);
 
@@ -159,15 +150,12 @@ elseif (isset($_GET["recetteId"]) && strpos($uri, "/modifierRecette") === 0) {
             ajouterTagsRecette($pdo, (int)$_GET["recetteId"], (int)$tagId);
         }
 
-        // On recharge la recette pour afficher les données à jour
+        // On recharge pour afficher les données à jour
         $recette = selectOneRecette($pdo);
+        $tagsActiveRecette = selectTagsActiveRecette($pdo);
 
         $messageSuccess = "Recette modifiée avec succès !";
     }
-
-    $tagsActiveRecette = selectTagsActiveRecette($pdo);
-    $tags = selectAllTags($pdo);
-    $categories = selectAllCategories($pdo);
 
     $title = "Modifier une recette";
     $template = "Views/Recettes/editerOuCreerRecette.php";
