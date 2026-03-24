@@ -19,14 +19,5 @@
                 <a href="#"><img class="imageIcon" src="../../Assets/Images/icon3.jpg" alt="google"></a>
             </div>
         </div>
-
-        <div class="footer-right">
-            <p class="footer-title">Le site</p>
-            <!-- count() compte le nombre d'éléments dans le tableau retourné par selectAllRecettes() -->
-            <p>🍽️ <?= count(selectAllRecettes($pdo)) ?> recettes disponibles</p>
-            <!-- date("Y") retourne l'année actuelle en 4 chiffres, ex: 2025 -->
-            <p>© <?= date("Y") ?> Marmiton-TTI</p>
-        </div>
-
     </div>
 </footer>
