@@ -2,7 +2,7 @@
     <div class="footer-container">
 
         <div class="footer-left">
-            <h3>🍳 Marmiton-TTI</h3>
+            <h3>Marmiton-TTI</h3>
             <p>Découvrez et partagez les meilleures recettes faites maison.</p>
             <div class="footer-links">
                 <a href="/">Accueil</a>

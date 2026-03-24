@@ -1,5 +1,4 @@
 <div class="error-container">
-        <div class="error-icon">⚠️</div>
         <h1>Accès non autorisé</h1>
         
         <div class="error-content">

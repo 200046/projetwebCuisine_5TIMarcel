@@ -15,19 +15,7 @@
     <div class="users-section">
         <h2>Informations</h2>
         <p><strong>Login :</strong> <?= htmlspecialchars($userVu->loginUser) ?></p>
-        <p><strong>Email :</strong> <?= htmlspecialchars($userVu->emailUser) ?></p>
         <p><strong>Rôle :</strong> <?= htmlspecialchars($userVu->role) ?></p>
-        <p><strong>Statut :</strong>
-            <?php if ($userVu->estSuspendu): ?>
-                <span class="badge badge-suspendu">Suspendu</span>
-                <a href="?id=<?= $userVu->id ?>&action=reactiver" class="btn-reactiv">Réactiver</a>
-            <?php else: ?>
-                <span class="badge badge-actif">Actif</span>
-                <?php if ($userVu->id != $_SESSION["utilisateur"]->id): ?>
-                    <a href="?id=<?= $userVu->id ?>&action=suspendre" class="btn-suspend">Suspendre</a>
-                <?php endif; ?>
-            <?php endif; ?>
-        </p>
     </div>
 
     <!-- Recettes de l'utilisateur -->

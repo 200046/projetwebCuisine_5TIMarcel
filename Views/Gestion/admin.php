@@ -1,13 +1,4 @@
 <div class="admin-container">
-
-    <!-- En-tête -->
-    <div class="admin-header">
-        <h1>Administration</h1>
-        <div class="user-info">
-            <span>Connecté en tant que : <strong><?= $_SESSION["utilisateur"]->prenomUser ?> <?= $_SESSION["utilisateur"]->nomUser ?></strong> (Admin)</span>
-        </div>
-    </div>
-
     <!-- Messages de notification -->
     <?php if (isset($message)): ?>
         <div class="alert alert-<?= $messageType ?>">
@@ -18,7 +9,6 @@
     <!-- Tableau des utilisateurs -->
     <div class="users-section">
         <h2>Gestion des utilisateurs</h2>
-
         <table class="user-table">
             <thead>
                 <tr>
@@ -89,5 +79,4 @@
             </tbody>
         </table>
     </div>
-
 </div>

@@ -1,17 +1,7 @@
 <div class="admin-container">
-
-    <div class="admin-header">
-        <h1>Modération</h1>
-        <div class="user-info">
-            <span>Connecté en tant que : <strong><?= $_SESSION["utilisateur"]->prenomUser ?> <?= $_SESSION["utilisateur"]->nomUser ?></strong> (Modérateur)</span>
-        </div>
-    </div>
-
     <div class="users-section">
         <h2>Comptes suspendus</h2>
-
         <?php $suspendusTrouves = false; ?>
-
         <table class="user-table">
             <thead>
                 <tr>
@@ -25,7 +15,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($utilisateursData as $data): ?>
+                <?php foreach ($utilisateursData as $data): ?>
                     <?php if ($data['estSuspendu']): ?>
                         <?php $suspendusTrouves = true; ?>
                         <?php $user = $data['user']; ?>
@@ -34,7 +24,6 @@
                             <td><?= htmlspecialchars($user->nomUser) ?></td>
                             <td><?= htmlspecialchars($user->prenomUser) ?></td>
                             <td><?= htmlspecialchars($user->loginUser) ?></td>
-                            <td><?= htmlspecialchars($user->emailUser) ?></td>
                             <td><?= $data['nbRecettes'] ?></td>
                             <td><span class="badge badge-suspendu">Suspendu</span></td>
                         </tr>
