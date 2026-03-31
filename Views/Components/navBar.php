@@ -25,7 +25,3 @@
         <?php endif; ?>
     </div>
 </ul>
-/*
- * Projet : Gestion de Recettes
- * Date : 31/03/2026
- */

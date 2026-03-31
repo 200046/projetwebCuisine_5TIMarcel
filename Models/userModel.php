@@ -462,7 +462,3 @@ function getUserById($pdo, $id)
         die($e->getMessage());
     }
 }
-/*
- * Projet : Gestion de Recettes
- * Date : 31/03/2026
- */

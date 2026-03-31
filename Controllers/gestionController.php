@@ -282,7 +282,3 @@ elseif (str_starts_with($uri, "/admVoirUser") && isset($_GET['uti_id'])) {
     $template = "Views/Gestion/voirUser.php";
     require_once("Views/base.php");
 }
-/*
- * Projet : Gestion de Recettes
- * Date : 31/03/2026
- */

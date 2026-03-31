@@ -57,7 +57,3 @@
     </div>
 
 </div>
-/*
- * Projet : Gestion de Recettes
- * Date : 31/03/2026
- */
