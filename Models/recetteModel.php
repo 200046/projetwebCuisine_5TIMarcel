@@ -273,7 +273,6 @@ function deleteOneRecette($pdo)
     }
 }
 
-
 // -----------------------------
 // Ajouter un tag à une recette
 // -----------------------------

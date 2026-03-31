@@ -1,33 +1,33 @@
--- 1. Effacer l'existant (Recommandé par le document [cite: 2])
-DROP TABLE IF EXISTS tag_recette;
-DROP TABLE IF EXISTS tag;
-DROP TABLE IF EXISTS recette;
-DROP TABLE IF EXISTS categorie;
-DROP TABLE IF EXISTS utilisateur;
+-- 1. Effacer l'existant
+DROP TABLE IF EXISTS tags_recettes;
+DROP TABLE IF EXISTS tags;
+DROP TABLE IF EXISTS recettes;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS utilisateurs;
 
 -- 2. Création des tables
-CREATE TABLE utilisateur (
+CREATE TABLE utilisateurs (
   uti_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   uti_nom VARCHAR(255) NOT NULL,
   uti_prenom VARCHAR(255) NOT NULL,
   uti_login VARCHAR(25) NOT NULL,
-  uti_motdepasse VARCHAR(255) NOT NULL, -- "uti_motdepasse" utilisé dans l'exemple 
+  uti_motdepasse VARCHAR(255) NOT NULL,
   uti_role VARCHAR(50) NOT NULL DEFAULT 'user',
   uti_email VARCHAR(150) NOT NULL UNIQUE,
   uti_est_suspendu TINYINT(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-CREATE TABLE categorie (
+CREATE TABLE categories (
   cat_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   cat_nom VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-CREATE TABLE tag (
+CREATE TABLE tags (
   tag_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   tag_nom VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-CREATE TABLE recette (
+CREATE TABLE recettes (
   rec_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   rec_titre VARCHAR(255) NOT NULL,
   rec_description TEXT,
@@ -38,24 +38,23 @@ CREATE TABLE recette (
   rec_image VARCHAR(255) NOT NULL DEFAULT 'https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',
   rec_uti_id INT,
   rec_cat_id INT,
-  FOREIGN KEY (rec_uti_id) REFERENCES utilisateur(uti_id),
-  FOREIGN KEY (rec_cat_id) REFERENCES categorie(cat_id)
+  FOREIGN KEY (rec_uti_id) REFERENCES utilisateurs(uti_id),
+  FOREIGN KEY (rec_cat_id) REFERENCES categories(cat_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-CREATE TABLE tag_recette (
+CREATE TABLE tags_recettes (
   tre_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   tre_rec_id INT,
   tre_tag_id INT,
-  FOREIGN KEY (tre_rec_id) REFERENCES recette(rec_id),
-  FOREIGN KEY (tre_tag_id) REFERENCES tag(tag_id)
+  FOREIGN KEY (tre_rec_id) REFERENCES recettes(rec_id),
+  FOREIGN KEY (tre_tag_id) REFERENCES tags(tag_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- =========================
 -- UTILISATEURS (20+)
 -- =========================
-INSERT INTO utilisateur (uti_nom, uti_prenom, uti_login, uti_motdepasse, uti_role, uti_email) VALUES
-('Admin', 'Root', 'celoumar', 'celoumar', 'admin', 'admin@site.com'),
-
+INSERT INTO utilisateurs (uti_nom, uti_prenom, uti_login, uti_motdepasse, uti_role, uti_email) VALUES
+('Admin', 'Celoumar', 'celoumar', 'celoumar', 'admin', 'admin@site.com'),
 ('Dupont','Jean','jdupont','1234','user','jean1@mail.com'),
 ('Martin','Claire','cmartin','1234','user','claire@mail.com'),
 ('Durand','Paul','pdurand','1234','user','paul@mail.com'),
@@ -80,7 +79,7 @@ INSERT INTO utilisateur (uti_nom, uti_prenom, uti_login, uti_motdepasse, uti_rol
 -- =========================
 -- CATEGORIES (20)
 -- =========================
-INSERT INTO categorie (cat_nom) VALUES
+INSERT INTO categories (cat_nom) VALUES
 ('Entrée'),('Plat'),('Dessert'),('Boisson'),('Végétarien'),
 ('Vegan'),('Rapide'),('Healthy'),('Snack'),('Petit-déjeuner'),
 ('Pâtes'),('Viande'),('Poisson'),('Salade'),('Soupe'),
@@ -89,7 +88,7 @@ INSERT INTO categorie (cat_nom) VALUES
 -- =========================
 -- TAGS (20)
 -- =========================
-INSERT INTO tag (tag_nom) VALUES
+INSERT INTO tags (tag_nom) VALUES
 ('facile'),('rapide'),('pas cher'),('épicé'),('sucré'),
 ('salé'),('sans gluten'),('bio'),('maison'),('light'),
 ('protéiné'),('healthy'),('traditionnel'),('moderne'),('fête'),
@@ -98,9 +97,8 @@ INSERT INTO tag (tag_nom) VALUES
 -- =========================
 -- RECETTES (20)
 -- =========================
-INSERT INTO recette 
+INSERT INTO recettes 
 (rec_titre, rec_description, rec_ingredients, rec_etapes, rec_temps_preparation, rec_difficulte, rec_image, rec_uti_id, rec_cat_id) VALUES
-
 ('Pâtes carbo','Classique italienne','pâtes,lardons,crème','cuire,mélanger',20,'facile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',1,11),
 ('Salade César','Fraîche et rapide','salade,poulet,parmesan','mélanger',15,'facile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',2,14),
 ('Burger maison','Délicieux burger','pain,steak,salade','cuire,assembler',25,'moyen','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',3,19),
@@ -123,9 +121,9 @@ INSERT INTO recette
 ('Glace maison','Dessert froid','lait,sucre','congeler',120,'moyen','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',20,3);
 
 -- =========================
--- TAG_RECETTE (20+)
+-- TAGS_RECETTES (20+)
 -- =========================
-INSERT INTO tag_recette (tre_rec_id, tre_tag_id) VALUES
+INSERT INTO tags_recettes (tre_rec_id, tre_tag_id) VALUES
 (1,1),(1,2),
 (2,2),(2,10),
 (3,3),(3,19),
@@ -134,6 +132,7 @@ INSERT INTO tag_recette (tre_rec_id, tre_tag_id) VALUES
 (6,5),(6,19),
 (7,1),(7,5),
 (8,2),(8,1),
+(9,13),(9,16),
 (9,13),(9,16),
 (10,14),(10,19),
 (11,3),(11,4),

@@ -13,7 +13,8 @@
             <?php endif; ?>
 
             <li class="navbar-user">
-                <?= htmlspecialchars($_SESSION['utilisateur']->preuti_cat_nom) ?>
+                <?= htmlspecialchars($_SESSION['utilisateur']->uti_prenom) ?>
+                
                 <ul class="dropdown">
                     <li><a href="profil">Mon profil</a></li>
                     <li><a href="deconnexion">Déconnexion</a></li>
