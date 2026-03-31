@@ -12,3 +12,8 @@
             <p>Si vous pensez que c'est une erreur, contactez l'administrateur.</p>
         </div>
     </div>
+    
+/*
+ * Projet : Gestion de Recettes
+ * Date : 31/03/2026
+ */

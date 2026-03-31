@@ -189,3 +189,8 @@ if ($uri === "/mesRecettes") {
     $template = "Views/Recettes/supprimerRecette.php";
     require_once "Views/base.php";
 }
+
+/*
+ * Projet : Gestion de Recettes
+ * Date : 31/03/2026
+ */

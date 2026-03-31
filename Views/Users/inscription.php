@@ -37,3 +37,7 @@
         <a href="/connexion" class="btn btn-link">Déjà un compte ? Connectez-vous</a>
     </form>
 </div>
+/*
+ * Projet : Gestion de Recettes
+ * Date : 31/03/2026
+ */

@@ -3,3 +3,7 @@
     <p>Votre compte a été suspendu. Veuillez contacter l'administrateur.</p>
     <a href="/">Retour à l'accueil</a>
 </div>
+/*
+ * Projet : Gestion de Recettes
+ * Date : 31/03/2026
+ */

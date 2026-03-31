@@ -14,3 +14,7 @@
         <a href="index.php" class="btn">Accueil</a>
         <a href="inscription" class="btn">Créer un nouveau compte</a>
     </div>
+/*
+ * Projet : Gestion de Recettes
+ * Date : 31/03/2026
+ */

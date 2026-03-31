@@ -1,0 +1,13 @@
+# Scripts utilitaires de migration et commentaires
+commentaire.php
+undoCommentaire.php
+
+# Fichiers système et IDE (recommandé)
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Fichiers de log ou dossiers de backup
+*.log
+backup/

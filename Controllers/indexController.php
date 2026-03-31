@@ -58,3 +58,8 @@ if ($uri === "/" || $uri === "/index" || $uri === "/index.php") {
     $template = "Views/pageAccueil.php";
     require_once "Views/base.php";
 }
+
+/*
+ * Projet : Gestion de Recettes
+ * Date : 31/03/2026
+ */
