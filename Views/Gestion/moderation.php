@@ -7,8 +7,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Nom</th>
-                    <th>Précat_nom</th>
-                    <th>Login</th>
+                    <th>Prénom</th> <th>Login</th>
                     <th>Email</th>
                     <th>Nb Recettes</th>
                     <th>Statut</th>
@@ -21,9 +20,15 @@
                         <?php $user = $data['user']; ?>
                         <tr>
                             <td><?= $user->uti_id ?></td>
-                            <td><?= htmlspecialchars($user->uti_cat_nom) ?></td>
-                            <td><?= htmlspecialchars($user->preuti_cat_nom) ?></td>
+                            
+                            <td><?= htmlspecialchars($user->uti_nom) ?></td>
+                            
+                            <td><?= htmlspecialchars($user->uti_prenom) ?></td>
+                            
                             <td><?= htmlspecialchars($user->uti_login) ?></td>
+                            
+                            <td><?= htmlspecialchars($user->uti_email) ?></td>
+                            
                             <td><?= $data['nbRecettes'] ?></td>
                             <td><span class="badge badge-suspendu">Suspendu</span></td>
                         </tr>
@@ -38,5 +43,4 @@
             </tbody>
         </table>
     </div>
-
 </div>

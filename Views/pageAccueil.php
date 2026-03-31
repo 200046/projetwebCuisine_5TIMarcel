@@ -9,10 +9,12 @@
             </div>
             <div class="center">
                 <p><span><?= $recette->rec_difficulte ?></span> - <span><?= $recette->rec_temps_preparation ?></span> min, <?= $recette->recetteCategorie ?></p>
-                <h3><a href="/voirrecette?tre_rec_id=<?= $recette->tre_rec_id ?>" class="btn btn-page">Voir la recette</a></h3>
+                
+                <h3><a href="/voirrecette?rec_id=<?= $recette->rec_id ?>" class="btn btn-page">Voir la recette</a></h3>
+                
                 <?php if ($uri == '/mesrecettes') : ?>
-                    <p><a href="/supprimerrecette?tre_rec_id=<?= $recette->tre_rec_id ?>">Supprimer la recette</a></p>
-                    <p><a href="/modifierrecette?tre_rec_id=<?= $recette->tre_rec_id ?>">Modifier la recette</a></p>
+                    <p><a href="/supprimerrecette?rec_id=<?= $recette->rec_id ?>">Supprimer la recette</a></p>
+                    <p><a href="/modifierrecette?rec_id=<?= $recette->rec_id ?>">Modifier la recette</a></p>
                 <?php endif; ?>
             </div>
         </div>

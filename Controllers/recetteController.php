@@ -4,106 +4,56 @@
 |--------------------------------------------------------------------------
 | Chargement des modèles
 |--------------------------------------------------------------------------
-| Ces fichiers permettent d'accéder aux fonctions liées à la base
-| de données :
-| - recetteModel : gestion des recettes
-| - userModel : gestion des utilisateurs
 */
 require_once "Models/recetteModel.php";
 require_once("Models/userModel.php");
-
 
 /*
 |--------------------------------------------------------------------------
 | Récupération de l'URL demandée
 |--------------------------------------------------------------------------
-| Cette variable permet de savoir quelle page l'utilisateur souhaite
-| afficher afin d'exécuter le bon traitement.
 */
 $uri = $_SERVER["REQUEST_URI"];
-
 
 /*
 |--------------------------------------------------------------------------
 | ROUTE : MES RECETTES
 |--------------------------------------------------------------------------
-| Cette route permet à l'utilisateur connecté d'afficher uniquement
-| les recettes qu'il a créées.
-|
-| La fonction selectMyRecettes() récupère toutes les recettes
-| associées à l'utilisateur dans la base de données.
 */
 if ($uri === "/mesRecettes") {
-    // Récupération des recettes de l'utilisateur
     $recettes = selectMyRecettes($pdo);
-
-    // Debug temporaire pour vérifier les données récupérées
-    // var_dump($recettes);
-
-    // Titre de la page
     $title = "Mes Recettes";
-
-    // Vue utilisée pour afficher les recettes
     $template = "Views/pageAccueil.php";
-
-    // Chargement du template principal
     require_once "Views/base.php";
 }
-
 
 /*
 |--------------------------------------------------------------------------
 | ROUTE : CRÉER UNE RECETTE
 |--------------------------------------------------------------------------
-| Cette route permet à l'utilisateur de créer une nouvelle recette.
-|
-| Étapes :
-| 1. Vérification si le formulaire a été envoyé
-| 2. Insertion de la recette dans la base de données
-| 3. Chargement des catégories et tags disponibles
-| 4. Affichage du formulaire de création
-*/ elseif ($uri === "/creerRecette") {
-
-    // Message de confirmation après création
-    $messageSuccess = null;
-
+*/
+elseif ($uri === "/creerRecette") {
     if (isset($_POST["btnEnvoi"])) {
-        $tre_rec_id = insertRecette($pdo);
+        // La fonction renvoie maintenant rec_id (clé primaire de recette)
+        $rec_id = insertRecette($pdo); 
         header("Location: /");
         exit();
     }
 
-    // Récupération des catégories disponibles
     $categories = selectAllCategories($pdo);
-
-    // Récupération des tags disponibles
     $tags = selectAllTags($pdo);
-
-    // Titre de la page
     $title = "Créer une recette";
-
-    // Vue contenant le formulaire de création
     $template = "Views/Recettes/editerOuCreerRecette.php";
-
-    // Chargement du template principal
     require_once "Views/base.php";
 }
-
 
 /*
 |--------------------------------------------------------------------------
 | ROUTE : VOIR UNE RECETTE
 |--------------------------------------------------------------------------
-| Cette route permet d'afficher les détails d'une recette.
-|
-| L'id de la recette est récupéré dans l'URL via le paramètre GET.
-| Exemple :
-| /voirRecette?tre_rec_id=5
-|
-| Les informations récupérées sont :
-| - les données de la recette
-| - les tags associés à la recette
-*/ elseif (isset($_GET["tre_rec_id"]) && str_starts_with($uri, "/voirrecette")) {
+| URL attendue : /voirrecette?rec_id=...
+*/
+elseif (isset($_GET["rec_id"]) && str_starts_with($uri, "/voirrecette")) {
 
     $recette = selectOneRecette($pdo);
     $tags = selectTagsActiveRecette($pdo);
@@ -113,72 +63,52 @@ if ($uri === "/mesRecettes") {
     require_once "Views/base.php";
 }
 
-
-
 /*
 |--------------------------------------------------------------------------
 | ROUTE : MODIFIER UNE RECETTE
 |--------------------------------------------------------------------------
-| Cette route permet de modifier une recette existante.
-|
-| Étapes :
-| 1. Vérification si le formulaire de modification est envoyé
-| 2. Mise à jour des informations de la recette
-| 3. Suppression des anciens tags
-| 4. Ajout des nouveaux tags sélectionnés
-*/ elseif (isset($_GET["tre_rec_id"]) && strpos($uri, "/modifierRecette") === 0) {
+| URL attendue : /modifierRecette?rec_id=...
+*/
+elseif (isset($_GET["rec_id"]) && strpos($uri, "/modifierRecette") === 0) {
 
     $messageSuccess = null;
+    $rec_id = (int)$_GET["rec_id"]; // Sécurisation en entier
 
-    // On récupère la recette EN PREMIER (avant le traitement du POST)
+    if (isset($_POST['btnEnvoi'])) {
+        updateRecette($pdo);
+        deleteTagsRecette($pdo, $rec_id);
+
+        foreach ($_POST["tags"] ?? [] as $tag_id) {
+            ajouterTagsRecette($pdo, $rec_id, (int)$tag_id);
+        }
+
+        $messageSuccess = "Recette modifiée avec succès !";
+    }
+
+    // On récupère les données à jour pour le formulaire
     $recette = selectOneRecette($pdo);
     $tagsActiveRecette = selectTagsActiveRecette($pdo);
     $tags = selectAllTags($pdo);
     $categories = selectAllCategories($pdo);
-
-    if (isset($_POST['btnEnvoi'])) {
-
-        updateRecette($pdo);
-
-        deleteTagsRecette($pdo, (int)$_GET["tre_rec_id"]);
-
-        foreach ($_POST["tags"] ?? [] as $tre_tag_id) {
-            ajouterTagsRecette($pdo, (int)$_GET["tre_rec_id"], (int)$tre_tag_id);
-        }
-
-        // On recharge pour afficher les données à jour
-        $recette = selectOneRecette($pdo);
-        $tagsActiveRecette = selectTagsActiveRecette($pdo);
-
-        $messageSuccess = "Recette modifiée avec succès !";
-    }
 
     $title = "Modifier une recette";
     $template = "Views/Recettes/editerOuCreerRecette.php";
     require_once "Views/base.php";
 }
 
-
 /*
 |--------------------------------------------------------------------------
 | ROUTE : SUPPRIMER UNE RECETTE
 |--------------------------------------------------------------------------
-| Cette route permet de supprimer une recette existante.
-|
-| Étapes :
-| 1. Afficher une page de confirmation
-| 2. Si l'utilisateur confirme :
-|    - suppression des tags associés
-|    - suppression de la recette
-*/ elseif (isset($_GET["tre_rec_id"]) && strpos($uri, "/supprimerRecette") === 0) {
+| URL attendue : /supprimerRecette?rec_id=...
+*/
+elseif (isset($_GET["rec_id"]) && strpos($uri, "/supprimerRecette") === 0) {
 
+    $rec_id = (int)$_GET["rec_id"];
     $recette = selectOneRecette($pdo);
 
-    $messageSuccess = null;
-
     if (isset($_POST['confirmerSuppression'])) {
-
-        deleteTagsRecette($pdo, (int)$_GET["tre_rec_id"]);
+        deleteTagsRecette($pdo, $rec_id);
         deleteOneRecette($pdo);
 
         header("Location: /mesRecettes");

@@ -3,10 +3,10 @@
 <?php endif; ?>
 
 <?php
-// Récupérer toutes les recettes
+// Note : Idéalement, cette requête devrait être dans ton Model
+// On s'assure de récupérer les recettes
 $recettes = $pdo->query('SELECT * FROM recette')->fetchAll(PDO::FETCH_OBJ);
 
-// Vérifier que l'utilisateur et les recettes existent
 if (!$recettes) {
     echo "<p>Aucune recette disponible.</p>";
 }
@@ -14,8 +14,9 @@ if (!$recettes) {
 
 <div class="flexible wrap space-around">
     <?php foreach ($recettes as $recette) : ?>
-        <?php
+        <?php 
         // Vérifie que la recette appartient à l'utilisateur connecté
+        // On utilise bien rec_uti_id (clé étrangère) et uti_id (session)
         if (!isset($_SESSION["utilisateur"]) || (int)$recette->rec_uti_id !== (int)$_SESSION["utilisateur"]->uti_id) {
             continue;
         }
@@ -34,21 +35,19 @@ if (!$recettes) {
 
             <div class="center">
                 <p>
-                    <span><?= htmlspecialchars($recette->rec_difficulte) ?></span> -
-                    <span><?= (int)$recette->rec_temps_preparation ?></span> min,
-                    <?= htmlspecialchars($recette->recetteCategorie ?? "Non catégorisée") ?>
+                    <span><?= htmlspecialchars($recette->rec_difficulte) ?></span> - 
+                    <span><?= (int)$recette->rec_temps_preparation ?></span> min
                 </p>
 
                 <h3>
-                    <a href="/voirRecette?tre_rec_id=<?= (int)$recette->tre_rec_id ?>" class="btn btn-page">
+                    <a href="/voirRecette?rec_id=<?= (int)$recette->rec_id ?>" class="btn btn-page">
                         Voir la recette
                     </a>
                 </h3>
 
-                <!-- Boutons visibles uniquement pour le propriétaire -->
                 <p>
-                    <a href="/modifierRecette?tre_rec_id=<?= (int)$recette->tre_rec_id ?>" class="btn btn-warning">Modifier</a>
-                    <a href="/supprimerRecette?tre_rec_id=<?= (int)$recette->tre_rec_id ?>" class="btn btn-danger" 
+                    <a href="/modifierRecette?rec_id=<?= (int)$recette->rec_id ?>" class="btn btn-warning">Modifier</a>
+                    <a href="/supprimerRecette?rec_id=<?= (int)$recette->rec_id ?>" class="btn btn-danger" 
                        onclick="return confirm('Voulez-vous vraiment supprimer cette recette ?');">
                         Supprimer
                     </a>

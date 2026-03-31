@@ -2,24 +2,13 @@
 require_once("Models/userModel.php");
 $uri = $_SERVER["REQUEST_URI"];
 
-
 /*
 |--------------------------------------------------------------------------
 | ROUTE : PAGE D'ADMINISTRATION
 |--------------------------------------------------------------------------
-| Cette condition vérifie si l'utilisateur tente d'accéder à la page
-| d'administration. On accepte aussi les URL contenant des paramètres
-| (ex : ?action=suspendre&id=3).
 */
 if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
 
-    /*
-    |--------------------------------------------------------------------------
-    | Vérification de la connexion
-    |--------------------------------------------------------------------------
-    | Si l'utilisateur n'est pas connecté (aucune session), on le redirige
-    | vers la page de connexion.
-    */
     if (!isset($_SESSION["utilisateur"])) {
         header("Location: /connexion");
         exit();
@@ -27,14 +16,6 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
 
     $title = "Page d'Administration";
 
-    /*
-    |--------------------------------------------------------------------------
-    | Vérification des droits administrateur
-    |--------------------------------------------------------------------------
-    | La fonction verifAdmin() vérifie dans la base de données si
-    | l'utilisateur connecté possède le rôle "admin".
-    | Si ce n'est pas le cas, on affiche une page d'erreur.
-    */
     if (!verifAdmin($pdo, $_SESSION["utilisateur"]->uti_id)) {
         $error = "Accès non autorisé. Vous devez être administrateur.";
         $template = "Views/Gestion/error.php";
@@ -42,180 +23,75 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
         exit();
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Gestion des messages système
-    |--------------------------------------------------------------------------
-    | Ces variables permettent d'afficher un message après une action
-    | (succès ou erreur).
-    */
     $message = null;
     $messageType = null;
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Traitement des actions administrateur
-    |--------------------------------------------------------------------------
-    | Si une action est envoyée dans l'URL avec l'id d'un utilisateur,
-    | l'administrateur peut :
-    | - suspendre un utilisateur
-    | - réactiver un utilisateur
-    | - promouvoir un utilisateur en modérateur
-    | - rétrograder un modérateur en utilisateur
-    */
+    // CORRECTION : On utilise uti_id au lieu de id
     if (isset($_GET['action']) && isset($_GET['uti_id'])) {
 
         $action = $_GET['action'];
         $id = $_GET['uti_id'];
 
-        /*
-        |--------------------------------------------------------------------------
-        | Protection : empêcher un admin de se suspendre lui-même
-        |--------------------------------------------------------------------------
-        | Cela évite qu'un administrateur bloque accidentellement
-        | son propre compte.
-        */
         if ($id == $_SESSION["utilisateur"]->uti_id) {
             $message = "Vous ne pouvez pas suspendre votre propre compte";
             $messageType = "error";
         } else {
-
-            /*
-            |--------------------------------------------------------------------------
-            | Suspension d'un utilisateur
-            |--------------------------------------------------------------------------
-            */
             if ($action === 'suspendre') {
                 suspendreUtilisateur($pdo, $id);
                 $message = "Utilisateur suspendu avec succès";
                 $messageType = "success";
-
-            /*
-            |--------------------------------------------------------------------------
-            | Réactivation d'un utilisateur suspendu
-            |--------------------------------------------------------------------------
-            */
             } elseif ($action === 'reactiver') {
                 reactiverUtilisateur($pdo, $id);
                 $message = "Utilisateur réactivé avec succès";
                 $messageType = "success";
-
-            /*
-            |--------------------------------------------------------------------------
-            | Promotion d'un utilisateur en modérateur
-            |--------------------------------------------------------------------------
-            */
             } elseif ($action === 'promouvoir') {
                 promouvoirModerateur($pdo, $id);
                 $_SESSION['flash_message'] = "Utilisateur promu modérateur avec succès";
                 $_SESSION['flash_type'] = "success";
-
-            /*
-            |--------------------------------------------------------------------------
-            | Rétrogradation d'un modérateur en utilisateur simple
-            |--------------------------------------------------------------------------
-            */
             } elseif ($action === 'retrograder') {
                 retrograderUtilisateur($pdo, $id);
                 $_SESSION['flash_message'] = "Utilisateur rétrogradé avec succès";
                 $_SESSION['flash_type'] = "success";
             }
 
-            /*
-            |--------------------------------------------------------------------------
-            | Redirection après action
-            |--------------------------------------------------------------------------
-            | Cette redirection empêche que l'action soit exécutée
-            | une deuxième fois si l'utilisateur recharge la page.
-            */
             header("Location: /administration");
             exit();
         }
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Récupération des utilisateurs
-    |--------------------------------------------------------------------------
-    | On récupère tous les utilisateurs de la base de données.
-    | Chaque utilisateur possède déjà l'information "uti_est_suspendu".
-    */
     $utilisateurs = getAllUtilisateurs($pdo);
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Construction des données pour l'affichage
-    |--------------------------------------------------------------------------
-    | Pour chaque utilisateur, on récupère :
-    | - ses informations
-    | - son statut de suspension
-    | - le cat_nombre de recettes qu'il a publiées
-    */
     $utilisateursData = [];
 
     foreach ($utilisateurs as $user) {
         $utilisateursData[] = [
             'user' => $user,
             'uti_est_suspendu' => $user->uti_est_suspendu,
-            'nbRecettes' => countRecettesByUser($pdo, $user->uti_id)
+            // CORRECTION : on utilise uti_id et on retire le "cat_" devant nombre
+            'nbRecettes' => countRecettesByUser($pdo, $user->uti_id) 
         ];
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Chargement de la vue administration
-    |--------------------------------------------------------------------------
-    */
     $template = "Views/Gestion/admin.php";
     require_once("Views/base.php");
 }
-
 
 /*
 |--------------------------------------------------------------------------
 | ROUTE : PAGE DE MODÉRATION
 |--------------------------------------------------------------------------
-| Cette page est accessible aux modérateurs et aux administrateurs.
 */
 elseif ($uri === "/moderation") {
-
-    /*
-    |--------------------------------------------------------------------------
-    | Vérification que l'utilisateur est connecté
-    |--------------------------------------------------------------------------
-    */
     if (!isset($_SESSION["utilisateur"])) {
         header("Location: /connexion");
         exit();
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Vérification du rôle
-    |--------------------------------------------------------------------------
-    | Seuls les modérateurs et administrateurs peuvent accéder
-    | à cette page. Sinon redirection vers l'accueil.
-    */
     if ($_SESSION["utilisateur"]->uti_role !== 'moderateur' && $_SESSION["utilisateur"]->uti_role !== 'admin') {
         header("Location: /");
         exit();
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Récupération de tous les utilisateurs
-    |--------------------------------------------------------------------------
-    */
     $utilisateurs = getAllUtilisateurs($pdo);
-
-    /*
-    |--------------------------------------------------------------------------
-    | Préparation des données pour l'affichage
-    |--------------------------------------------------------------------------
-    */
     $utilisateursData = [];
 
     foreach ($utilisateurs as $user) {
@@ -226,25 +102,24 @@ elseif ($uri === "/moderation") {
         ];
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Chargement de la page de modération
-    |--------------------------------------------------------------------------
-    */
     $title = "Page de modération";
     $template = "Views/Gestion/moderation.php";
     require_once("Views/base.php");
 }
 
+/*
+|--------------------------------------------------------------------------
+| ROUTE : VOIR UN UTILISATEUR (ADMIN)
+|--------------------------------------------------------------------------
+*/
+// CORRECTION : L'URL doit être /admVoirUser?uti_id=...
 elseif (str_starts_with($uri, "/admVoirUser") && isset($_GET['uti_id'])) {
 
-    // Vérification connexion
     if (!isset($_SESSION["utilisateur"])) {
         header("Location: /connexion");
         exit();
     }
 
-    // Vérification admin
     if (!verifAdmin($pdo, $_SESSION["utilisateur"]->uti_id)) {
         header("Location: /");
         exit();
@@ -252,31 +127,26 @@ elseif (str_starts_with($uri, "/admVoirUser") && isset($_GET['uti_id'])) {
 
     $message = null;
     $messageType = null;
+    $target_uti_id = (int)$_GET['uti_id'];
 
-    // Suppression d'une recette
-    if (isset($_GET['action']) && $_GET['action'] === 'supprimerRecette' && isset($_GET['tre_rec_id'])) {
-        deleteTagsRecette($pdo, (int)$_GET['tre_rec_id']);
+    // CORRECTION : suppression d'une recette (on utilise rec_id)
+    if (isset($_GET['action']) && $_GET['action'] === 'supprimerRecette' && isset($_GET['rec_id'])) {
+        deleteTagsRecette($pdo, (int)$_GET['rec_id']);
         deleteOneRecette($pdo);
         $message = "Recette supprimée avec succès";
         $messageType = "success";
     }
 
-    // Bannissement du compte
+    // Suspension / Réactivation
     if (isset($_GET['action']) && $_GET['action'] === 'suspendre') {
-        suspendreUtilisateur($pdo, (int)$_GET['uti_id']);
-        $message = "Utilisateur suspendu avec succès";
-        $messageType = "success";
+        suspendreUtilisateur($pdo, $target_uti_id);
     }
-
-    // Réactivation du compte
     if (isset($_GET['action']) && $_GET['action'] === 'reactiver') {
-        reactiverUtilisateur($pdo, (int)$_GET['uti_id']);
-        $message = "Utilisateur réactivé avec succès";
-        $messageType = "success";
+        reactiverUtilisateur($pdo, $target_uti_id);
     }
 
-    $userVu = getUserById($pdo, (int)$_GET['uti_id']);
-    $recettes = getRecettesByUserId($pdo, (int)$_GET['uti_id']);
+    $userVu = getUserById($pdo, $target_uti_id);
+    $recettes = getRecettesByUserId($pdo, $target_uti_id);
 
     $title = "Voir l'utilisateur";
     $template = "Views/Gestion/voirUser.php";
