@@ -1,10 +1,13 @@
 <?php
 require_once("Models/userModel.php");
+require_once("Models/categorieModel.php");
+require_once("Models/tagModel.php");
+
 $uri = $_SERVER["REQUEST_URI"];
 
 /*
 |--------------------------------------------------------------------------
-| ROUTE : PAGE D'ADMINISTRATION
+| ROUTE : PAGE D'ADMINISTRATION (Gestion Utilisateurs)
 |--------------------------------------------------------------------------
 */
 if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
@@ -14,8 +17,6 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
         exit();
     }
 
-    $title = "Page d'Administration";
-
     if (!verifAdmin($pdo, $_SESSION["utilisateur"]->uti_id)) {
         $error = "Accès non autorisé. Vous devez être administrateur.";
         $template = "Views/Gestion/error.php";
@@ -23,37 +24,28 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
         exit();
     }
 
+    $title = "Page d'Administration";
     $message = null;
     $messageType = null;
 
-    // CORRECTION : On utilise uti_id au lieu de id
+    // Gestion des actions sur les utilisateurs
     if (isset($_GET['action']) && isset($_GET['uti_id'])) {
-
         $action = $_GET['action'];
-        $id = $_GET['uti_id'];
+        $id = (int)$_GET['uti_id'];
 
         if ($id == $_SESSION["utilisateur"]->uti_id) {
-            $message = "Vous ne pouvez pas suspendre votre propre compte";
+            $message = "Vous ne pouvez pas modifier votre propre compte admin ici.";
             $messageType = "error";
         } else {
             if ($action === 'suspendre') {
                 suspendreUtilisateur($pdo, $id);
-                $message = "Utilisateur suspendu avec succès";
-                $messageType = "success";
             } elseif ($action === 'reactiver') {
                 reactiverUtilisateur($pdo, $id);
-                $message = "Utilisateur réactivé avec succès";
-                $messageType = "success";
             } elseif ($action === 'promouvoir') {
                 promouvoirModerateur($pdo, $id);
-                $_SESSION['flash_message'] = "Utilisateur promu modérateur avec succès";
-                $_SESSION['flash_type'] = "success";
             } elseif ($action === 'retrograder') {
                 retrograderUtilisateur($pdo, $id);
-                $_SESSION['flash_message'] = "Utilisateur rétrogradé avec succès";
-                $_SESSION['flash_type'] = "success";
             }
-
             header("Location: /administration");
             exit();
         }
@@ -66,7 +58,6 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
         $utilisateursData[] = [
             'user' => $user,
             'uti_est_suspendu' => $user->uti_est_suspendu,
-            // CORRECTION : on utilise uti_id et on retire le "cat_" devant nombre
             'nbRecettes' => countRecettesByUser($pdo, $user->uti_id) 
         ];
     }
@@ -109,46 +100,123 @@ elseif ($uri === "/moderation") {
 
 /*
 |--------------------------------------------------------------------------
-| ROUTE : VOIR UN UTILISATEUR (ADMIN)
+| ROUTE : VOIR UN UTILISATEUR (DÉTAILS ADMIN)
 |--------------------------------------------------------------------------
 */
-// CORRECTION : L'URL doit être /admVoirUser?uti_id=...
 elseif (str_starts_with($uri, "/admVoirUser") && isset($_GET['uti_id'])) {
 
-    if (!isset($_SESSION["utilisateur"])) {
-        header("Location: /connexion");
-        exit();
-    }
-
-    if (!verifAdmin($pdo, $_SESSION["utilisateur"]->uti_id)) {
+    if (!isset($_SESSION["utilisateur"]) || !verifAdmin($pdo, $_SESSION["utilisateur"]->uti_id)) {
         header("Location: /");
         exit();
     }
 
-    $message = null;
-    $messageType = null;
     $target_uti_id = (int)$_GET['uti_id'];
 
-    // CORRECTION : suppression d'une recette (on utilise rec_id)
+    // Action : suppression d'une recette depuis la vue détail
     if (isset($_GET['action']) && $_GET['action'] === 'supprimerRecette' && isset($_GET['rec_id'])) {
-        deleteTagsRecette($pdo, (int)$_GET['rec_id']);
-        deleteOneRecette($pdo);
-        $message = "Recette supprimée avec succès";
-        $messageType = "success";
-    }
-
-    // Suspension / Réactivation
-    if (isset($_GET['action']) && $_GET['action'] === 'suspendre') {
-        suspendreUtilisateur($pdo, $target_uti_id);
-    }
-    if (isset($_GET['action']) && $_GET['action'] === 'reactiver') {
-        reactiverUtilisateur($pdo, $target_uti_id);
+        $rec_id = (int)$_GET['rec_id'];
+        deleteTagsRecette($pdo, $rec_id); // Nettoyage table pivot tags_recettes
+        deleteOneRecette($pdo);           // Suppression table recettes
+        header("Location: /admVoirUser?uti_id=" . $target_uti_id);
+        exit();
     }
 
     $userVu = getUserById($pdo, $target_uti_id);
     $recettes = getRecettesByUserId($pdo, $target_uti_id);
 
-    $title = "Voir l'utilisateur";
+    $title = "Détails Utilisateur";
     $template = "Views/Gestion/voirUser.php";
+    require_once("Views/base.php");
+}
+
+/*
+|--------------------------------------------------------------------------
+| ROUTE : GESTION DES TAGS
+|--------------------------------------------------------------------------
+*/
+elseif ($uri === "/gestionTags" || str_starts_with($uri, "/gestionTags?")) {
+    if (!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']->uti_role !== 'admin') {
+        header("Location: /");
+        exit();
+    }
+
+    $messageErreur = "";
+
+    // Suppression
+    if (isset($_GET['action']) && $_GET['action'] === 'supprTag' && isset($_GET['id'])) {
+        $id = (int)$_GET['id'];
+        if (countRecettesByTag($pdo, $id) > 0) {
+            $messageErreur = "Action annulée : ce tag est utilisé par des recettes.";
+        } else {
+            deleteTag($pdo, $id);
+            header("Location: /gestionTags");
+            exit();
+        }
+    }
+
+    // Ajout
+    if (isset($_POST['btnAjouterTag']) && !empty($_POST['nouveau_tag'])) {
+        addTag($pdo, $_POST['nouveau_tag']);
+        header("Location: /gestionTags");
+        exit();
+    }
+
+    // Update
+    if (isset($_POST['btnUpdateTag']) && !empty($_POST['update_nom'])) {
+        updateTag($pdo, (int)$_POST['tag_id'], $_POST['update_nom']);
+        header("Location: /gestionTags");
+        exit();
+    }
+
+    $tags = getAllTags($pdo);
+    $title = "Gestion des Tags";
+    $template = "Views/Gestion/gestionTags.php";
+    require_once("Views/base.php");
+}
+
+/*
+|--------------------------------------------------------------------------
+| ROUTE : GESTION DES CATÉGORIES
+|--------------------------------------------------------------------------
+*/
+elseif ($uri === "/gestionCategories" || str_starts_with($uri, "/gestionCategories?")) {
+    if (!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']->uti_role !== 'admin') {
+        header("Location: /");
+        exit();
+    }
+
+    $messageErreur = "";
+
+    // Suppression
+    if (isset($_GET['action']) && $_GET['action'] === 'supprCat' && isset($_GET['id'])) {
+        $id_a_supprimer = (int)$_GET['id'];
+        $nbRecettes = countRecettesByCategorie($pdo, $id_a_supprimer);
+
+        if ($nbRecettes > 0) {
+            $messageErreur = "Action annulée : " . $nbRecettes . " recette(s) utilisent cette catégorie.";
+        } else {
+            deleteCategorie($pdo, $id_a_supprimer);
+            header("Location: /gestionCategories");
+            exit();
+        }
+    }
+
+    // Ajout
+    if (isset($_POST['btnAjouter']) && !empty($_POST['nouveau_nom'])) {
+        addCategorie($pdo, $_POST['nouveau_nom']);
+        header("Location: /gestionCategories");
+        exit();
+    }
+
+    // Update
+    if (isset($_POST['btnUpdate']) && !empty($_POST['update_nom'])) {
+        updateCategorie($pdo, (int)$_POST['cat_id'], $_POST['update_nom']);
+        header("Location: /gestionCategories");
+        exit();
+    }
+
+    $categories = getAllCategories($pdo);
+    $title = "Gestion des Catégories";
+    $template = "Views/Gestion/gestionCategories.php";
     require_once("Views/base.php");
 }

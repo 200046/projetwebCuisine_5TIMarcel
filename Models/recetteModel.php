@@ -6,21 +6,19 @@
 function selectAllRecettes($pdo)
 {
     try {
-        $query = 'SELECT recette.*, categorie.cat_nom AS recetteCategorie, utilisateur.uti_est_suspendu 
-                  FROM recette
-                  INNER JOIN utilisateur ON recette.rec_uti_id = utilisateur.uti_id
-                  INNER JOIN categorie ON recette.rec_cat_id = categorie.cat_id
-                  WHERE utilisateur.uti_est_suspendu = 0';
+        // Correction : categories (pluriel), utilisateurs (pluriel)
+        $query = 'SELECT recettes.*, categories.cat_nom AS recetteCategorie, utilisateurs.uti_est_suspendu 
+                  FROM recettes
+                  INNER JOIN utilisateurs ON recettes.rec_uti_id = utilisateurs.uti_id
+                  INNER JOIN categories ON recettes.rec_cat_id = categories.cat_id
+                  WHERE utilisateurs.uti_est_suspendu = 0';
 
         $selectRecette = $pdo->prepare($query);
         $selectRecette->execute();
 
-        $recettes = $selectRecette->fetchAll(PDO::FETCH_OBJ);
-
-        return $recettes;
+        return $selectRecette->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
+        die($e->getMessage());
     }
 }
 
@@ -30,21 +28,20 @@ function selectAllRecettes($pdo)
 function deleteTagsRecetteFromUser($pdo)
 {
     try {
-        $query = 'DELETE FROM tag_recette 
+        // Correction : tags_recettes (selon ton schéma SQL)
+        $query = 'DELETE FROM tags_recettes 
                   WHERE tre_rec_id IN (
                     SELECT rec_id 
-                    FROM recette 
+                    FROM recettes 
                     WHERE rec_uti_id = :rec_uti_id
                   )';
 
         $deleteTags = $pdo->prepare($query);
-
         $deleteTags->execute([
             'rec_uti_id' => $_SESSION["utilisateur"]->uti_id
         ]);
     } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
+        die($e->getMessage());
     }
 }
 
@@ -55,18 +52,15 @@ function deleteTagsRecetteFromUser($pdo)
 function deleteAllRecettesFromUser($pdo)
 {
     try {
-
-        $query = 'DELETE FROM recette 
+        $query = 'DELETE FROM recettes 
                   WHERE rec_uti_id = :rec_uti_id';
 
         $deleteRecettes = $pdo->prepare($query);
-
         $deleteRecettes->execute([
             'rec_uti_id' => $_SESSION["utilisateur"]->uti_id
         ]);
     } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
+        die($e->getMessage());
     }
 }
 
@@ -77,22 +71,17 @@ function deleteAllRecettesFromUser($pdo)
 function selectMyRecettes($pdo)
 {
     try {
-
-        $query = 'SELECT * FROM recette 
+        $query = 'SELECT * FROM recettes 
                   WHERE rec_uti_id = :rec_uti_id';
 
         $selectRecette = $pdo->prepare($query);
-
         $selectRecette->execute([
             'rec_uti_id' => $_SESSION["utilisateur"]->uti_id
         ]);
 
-        $recettes = $selectRecette->fetchAll();
-
-        return $recettes;
+        return $selectRecette->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
+        die($e->getMessage());
     }
 }
 
@@ -103,18 +92,15 @@ function selectMyRecettes($pdo)
 function selectAllCategories($pdo)
 {
     try {
-
-        $query = 'SELECT * FROM categorie';
+        // Correction : categories
+        $query = 'SELECT * FROM categories';
 
         $selectCategories = $pdo->prepare($query);
         $selectCategories->execute();
 
-        $categories = $selectCategories->fetchAll();
-
-        return $categories;
+        return $selectCategories->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
+        die($e->getMessage());
     }
 }
 
@@ -125,18 +111,15 @@ function selectAllCategories($pdo)
 function selectAllTags($pdo)
 {
     try {
-
-        $query = 'SELECT * FROM tag';
+        // Correction : tags
+        $query = 'SELECT * FROM tags';
 
         $selectTags = $pdo->prepare($query);
         $selectTags->execute();
 
-        $tags = $selectTags->fetchAll();
-
-        return $tags;
+        return $selectTags->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
+        die($e->getMessage());
     }
 }
 
@@ -146,9 +129,10 @@ function selectAllTags($pdo)
 // -----------------------------
 function selectOneRecette($pdo) {
     try {
-        $query = 'SELECT recette.*, categorie.cat_nom AS recetteCategorie
-                  FROM recette
-                  INNER JOIN categorie ON recette.rec_cat_id = categorie.cat_id
+        // Correction : categories
+        $query = 'SELECT recettes.*, categories.cat_nom AS recetteCategorie
+                  FROM recettes
+                  INNER JOIN categories ON recettes.rec_cat_id = categories.cat_id
                   WHERE rec_id = :rec_id';
 
         $selectRecette = $pdo->prepare($query);
@@ -170,26 +154,22 @@ function selectOneRecette($pdo) {
 function selectTagsActiveRecette($pdo)
 {
     try {
-
-        $query = 'SELECT * FROM tag 
+        // Correction : tags et tags_recettes
+        $query = 'SELECT * FROM tags 
                   WHERE tag_id IN (
                     SELECT tre_tag_id 
-                    FROM tag_recette 
+                    FROM tags_recettes 
                     WHERE tre_rec_id = :rec_id
                   )';
 
         $selectTags = $pdo->prepare($query);
-
         $selectTags->execute([
             'rec_id' => $_GET["rec_id"]
         ]);
 
-        $tags = $selectTags->fetchAll();
-
-        return $tags;
+        return $selectTags->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
+        die($e->getMessage());
     }
 }
 
@@ -200,19 +180,18 @@ function selectTagsActiveRecette($pdo)
 function updateRecette($pdo)
 {
     try {
-        $query = 'UPDATE recette SET 
-          rec_titre = :titre, 
-          rec_description = :description, 
-          rec_ingredients = :ingredients, 
-          rec_etapes = :etapes, 
-          rec_temps_preparation = :temps_preparation, 
-          rec_difficulte = :difficulte, 
-          rec_cat_id = :rec_cat_id, 
-          rec_image = :image 
-          WHERE rec_id = :rec_id';
+        $query = 'UPDATE recettes SET 
+                  rec_titre = :titre, 
+                  rec_description = :description, 
+                  rec_ingredients = :ingredients, 
+                  rec_etapes = :etapes, 
+                  rec_temps_preparation = :temps_preparation, 
+                  rec_difficulte = :difficulte, 
+                  rec_cat_id = :rec_cat_id, 
+                  rec_image = :image 
+                  WHERE rec_id = :rec_id';
 
         $updateRecette = $pdo->prepare($query);
-
         $updateRecette->execute([
             'titre'             => $_POST["titre"],
             'description'       => $_POST["description"],
@@ -236,18 +215,16 @@ function updateRecette($pdo)
 function deleteTagsRecette($pdo, $rec_id)
 {
     try {
-
-        $query = 'DELETE FROM tag_recette 
+        // Correction : tags_recettes
+        $query = 'DELETE FROM tags_recettes 
                   WHERE tre_rec_id = :rec_id';
 
         $deleteTags = $pdo->prepare($query);
-
         $deleteTags->execute([
             'rec_id' => $rec_id
         ]);
     } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
+        die($e->getMessage());
     }
 }
 
@@ -258,18 +235,15 @@ function deleteTagsRecette($pdo, $rec_id)
 function deleteOneRecette($pdo)
 {
     try {
-
-        $query = 'DELETE FROM recette 
+        $query = 'DELETE FROM recettes 
                   WHERE rec_id = :rec_id';
 
         $deleteRecette = $pdo->prepare($query);
-
         $deleteRecette->execute([
             'rec_id' => $_GET["rec_id"]
         ]);
     } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
+        die($e->getMessage());
     }
 }
 
@@ -279,19 +253,17 @@ function deleteOneRecette($pdo)
 function ajouterTagsRecette($pdo, $rec_id, $tag_id)
 {
     try {
-
-        $query = 'INSERT INTO tag_recette (tre_rec_id, tre_tag_id) 
+        // Correction : tags_recettes
+        $query = 'INSERT INTO tags_recettes (tre_rec_id, tre_tag_id) 
                   VALUES (:rec_id, :tag_id)';
 
         $insertTag = $pdo->prepare($query);
-
         $insertTag->execute([
             'rec_id' => $rec_id,
             'tag_id' => $tag_id
         ]);
     } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
+        die($e->getMessage());
     }
 }
 
@@ -301,7 +273,7 @@ function ajouterTagsRecette($pdo, $rec_id, $tag_id)
 function insertRecette($pdo)
 {
     try {
-        $query = 'INSERT INTO recette (
+        $query = 'INSERT INTO recettes (
                     rec_titre, 
                     rec_description, 
                     rec_ingredients, 
@@ -324,7 +296,6 @@ function insertRecette($pdo)
                   )';
 
         $insertRecette = $pdo->prepare($query);
-
         $insertRecette->execute([
             'titre'            => $_POST["titre"],
             'description'      => $_POST["description"],
@@ -339,8 +310,7 @@ function insertRecette($pdo)
 
         return $pdo->lastInsertId();
     } catch (PDOException $e) {
-        $message = $e->getMessage();
-        die($message);
+        die($e->getMessage());
     }
 }
 
@@ -351,7 +321,7 @@ function insertRecette($pdo)
 function getRecettesByUserId($pdo, $userId)
 {
     try {
-        $query = 'SELECT * FROM recette WHERE rec_uti_id = :rec_uti_id';
+        $query = 'SELECT * FROM recettes WHERE rec_uti_id = :rec_uti_id';
         $stmt = $pdo->prepare($query);
         $stmt->execute(['rec_uti_id' => $userId]);
         return $stmt->fetchAll(PDO::FETCH_OBJ);
