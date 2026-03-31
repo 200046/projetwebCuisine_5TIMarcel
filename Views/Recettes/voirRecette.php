@@ -4,12 +4,12 @@
         <h2 class="center"><?= htmlspecialchars($recette->rec_titre) ?></h2>
 
         <div class="flexible discImageEcole center">
-            <img src="https://picsum.photos/400/300?random=<?= $recette->rec_id ?>" alt="photo de la recette">
+            <img src="<?= $recette->rec_image ?>" alt="photo de la recette">
         </div>
 
         <div class="center">
             <p>
-                <span><?= htmlspecialchars($recette->rec_difficulte) ?></span> - 
+                <span><?= htmlspecialchars($recette->rec_difficulte) ?></span> -
                 <span><?= (int)$recette->rec_temps_preparation ?></span> min -
                 <span><?= htmlspecialchars($recette->recetteCategorie ?? "Général") ?></span>
             </p>
@@ -31,12 +31,12 @@
         </div>
 
         <?php if (!empty($tags)) : ?>
-        <div class="mb-3">
-            <h3>Tags</h3>
-            <?php foreach ($tags as $tag) : ?>
-                <span class="badge"><?= htmlspecialchars($tag->tag_nom ?? $tag->cat_nom) ?></span>
-            <?php endforeach ?>
-        </div>
+            <div class="mb-3">
+                <h3>Tags</h3>
+                <?php foreach ($tags as $tag) : ?>
+                    <span class="badge"><?= htmlspecialchars($tag->tag_nom ?? $tag->cat_nom) ?></span>
+                <?php endforeach ?>
+            </div>
         <?php endif ?>
 
         <div class="center mt-3">

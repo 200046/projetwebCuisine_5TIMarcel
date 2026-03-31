@@ -27,7 +27,7 @@ if (!$recettes) {
 
             <div class="flexible discImageEcole">
                 <?php if (!empty($recette->rec_image)) : ?>
-                    <img src="<?= htmlspecialchars($recette->rec_image) ?>" alt="Photo de la recette">
+                <img src="<?= $recette->rec_image ?>" alt="photo de la recette">
                 <?php else : ?>
                     <p>Aucune image disponible</p>
                 <?php endif; ?>
