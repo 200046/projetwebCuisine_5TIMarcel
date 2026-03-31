@@ -9,13 +9,13 @@
     
     <form method="POST" action="/inscription">
         <div class="mb-3">
-            <label for="nom" class="form-label">Nom</label>
-            <input type="text" class="form-control" id="nom" name="nom" required>
+            <label for="cat_nom" class="form-label">Nom</label>
+            <input type="text" class="form-control" id="cat_nom" name="cat_nom" required>
         </div>
         
         <div class="mb-3">
-            <label for="prenom" class="form-label">Prénom</label>
-            <input type="text" class="form-control" id="prenom" name="prenom" required>
+            <label for="precat_nom" class="form-label">Précat_nom</label>
+            <input type="text" class="form-control" id="precat_nom" name="precat_nom" required>
         </div>
         
         <div class="mb-3">

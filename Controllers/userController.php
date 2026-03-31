@@ -64,12 +64,12 @@ if ($uri === "/connexion") {
    require_once("Views/base.php");
 }
 
-elseif (str_starts_with($uri, "/voirUser") && isset($_GET['id'])) {
+elseif (str_starts_with($uri, "/voirUser") && isset($_GET['uti_id'])) {
 
-    $userVu = getUserById($pdo, (int)$_GET['id']);
-    $recettes = getRecettesByUserId($pdo, (int)$_GET['id']);
+    $userVu = getUserById($pdo, (int)$_GET['uti_id']);
+    $recettes = getRecettesByUserId($pdo, (int)$_GET['uti_id']);
 
-    $title = "Profil de " . $userVu->prenomUser;
+    $title = "Profil de " . $userVu->preuti_cat_nom;
     $template = "Views/Users/voirUser.php";
     require_once("Views/base.php");
 }

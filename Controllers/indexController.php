@@ -20,7 +20,7 @@ $uri = $_SERVER["REQUEST_URI"];
 if (isset($_SESSION["utilisateur"])) {
 
     // Récupération du statut de suspension dans la base de données
-    $statut = getStatutSuspension($pdo, $_SESSION["utilisateur"]->id);
+    $statut = getStatutSuspension($pdo, $_SESSION["utilisateur"]->uti_id);
 
     // Si l'utilisateur est suspendu
     if ($statut == 1) {

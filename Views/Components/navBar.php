@@ -6,14 +6,14 @@
             <li><a href="mesRecettes">Mes recettes</a></li>
             <li><a href="creerRecette" class="btn-creer">+ Créer une recette</a></li>
 
-            <?php if ($_SESSION['utilisateur']->role === 'admin'): ?>
+            <?php if ($_SESSION['utilisateur']->uti_role === 'admin'): ?>
                 <li><a href="administration">Admin</a></li>
-            <?php elseif ($_SESSION['utilisateur']->role === 'moderateur'): ?>
+            <?php elseif ($_SESSION['utilisateur']->uti_role === 'moderateur'): ?>
                 <li><a href="moderation">Modération</a></li>
             <?php endif; ?>
 
             <li class="navbar-user">
-                <?= htmlspecialchars($_SESSION['utilisateur']->prenomUser) ?>
+                <?= htmlspecialchars($_SESSION['utilisateur']->preuti_cat_nom) ?>
                 <ul class="dropdown">
                     <li><a href="profil">Mon profil</a></li>
                     <li><a href="deconnexion">Déconnexion</a></li>

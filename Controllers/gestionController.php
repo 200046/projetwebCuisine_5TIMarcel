@@ -35,7 +35,7 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
     | l'utilisateur connecté possède le rôle "admin".
     | Si ce n'est pas le cas, on affiche une page d'erreur.
     */
-    if (!verifAdmin($pdo, $_SESSION["utilisateur"]->id)) {
+    if (!verifAdmin($pdo, $_SESSION["utilisateur"]->uti_id)) {
         $error = "Accès non autorisé. Vous devez être administrateur.";
         $template = "Views/Gestion/error.php";
         require_once("Views/base.php");
@@ -64,10 +64,10 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
     | - promouvoir un utilisateur en modérateur
     | - rétrograder un modérateur en utilisateur
     */
-    if (isset($_GET['action']) && isset($_GET['id'])) {
+    if (isset($_GET['action']) && isset($_GET['uti_id'])) {
 
         $action = $_GET['action'];
-        $id = $_GET['id'];
+        $id = $_GET['uti_id'];
 
         /*
         |--------------------------------------------------------------------------
@@ -76,7 +76,7 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
         | Cela évite qu'un administrateur bloque accidentellement
         | son propre compte.
         */
-        if ($id == $_SESSION["utilisateur"]->id) {
+        if ($id == $_SESSION["utilisateur"]->uti_id) {
             $message = "Vous ne pouvez pas suspendre votre propre compte";
             $messageType = "error";
         } else {
@@ -140,7 +140,7 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
     | Récupération des utilisateurs
     |--------------------------------------------------------------------------
     | On récupère tous les utilisateurs de la base de données.
-    | Chaque utilisateur possède déjà l'information "estSuspendu".
+    | Chaque utilisateur possède déjà l'information "uti_est_suspendu".
     */
     $utilisateurs = getAllUtilisateurs($pdo);
 
@@ -152,15 +152,15 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
     | Pour chaque utilisateur, on récupère :
     | - ses informations
     | - son statut de suspension
-    | - le nombre de recettes qu'il a publiées
+    | - le cat_nombre de recettes qu'il a publiées
     */
     $utilisateursData = [];
 
     foreach ($utilisateurs as $user) {
         $utilisateursData[] = [
             'user' => $user,
-            'estSuspendu' => $user->estSuspendu,
-            'nbRecettes' => countRecettesByUser($pdo, $user->id)
+            'uti_est_suspendu' => $user->uti_est_suspendu,
+            'nbRecettes' => countRecettesByUser($pdo, $user->uti_id)
         ];
     }
 
@@ -199,7 +199,7 @@ elseif ($uri === "/moderation") {
     | Seuls les modérateurs et administrateurs peuvent accéder
     | à cette page. Sinon redirection vers l'accueil.
     */
-    if ($_SESSION["utilisateur"]->role !== 'moderateur' && $_SESSION["utilisateur"]->role !== 'admin') {
+    if ($_SESSION["utilisateur"]->uti_role !== 'moderateur' && $_SESSION["utilisateur"]->uti_role !== 'admin') {
         header("Location: /");
         exit();
     }
@@ -221,8 +221,8 @@ elseif ($uri === "/moderation") {
     foreach ($utilisateurs as $user) {
         $utilisateursData[] = [
             'user' => $user,
-            'estSuspendu' => $user->estSuspendu,
-            'nbRecettes' => countRecettesByUser($pdo, $user->id)
+            'uti_est_suspendu' => $user->uti_est_suspendu,
+            'nbRecettes' => countRecettesByUser($pdo, $user->uti_id)
         ];
     }
 
@@ -236,7 +236,7 @@ elseif ($uri === "/moderation") {
     require_once("Views/base.php");
 }
 
-elseif (str_starts_with($uri, "/admVoirUser") && isset($_GET['id'])) {
+elseif (str_starts_with($uri, "/admVoirUser") && isset($_GET['uti_id'])) {
 
     // Vérification connexion
     if (!isset($_SESSION["utilisateur"])) {
@@ -245,7 +245,7 @@ elseif (str_starts_with($uri, "/admVoirUser") && isset($_GET['id'])) {
     }
 
     // Vérification admin
-    if (!verifAdmin($pdo, $_SESSION["utilisateur"]->id)) {
+    if (!verifAdmin($pdo, $_SESSION["utilisateur"]->uti_id)) {
         header("Location: /");
         exit();
     }
@@ -254,8 +254,8 @@ elseif (str_starts_with($uri, "/admVoirUser") && isset($_GET['id'])) {
     $messageType = null;
 
     // Suppression d'une recette
-    if (isset($_GET['action']) && $_GET['action'] === 'supprimerRecette' && isset($_GET['recetteId'])) {
-        deleteTagsRecette($pdo, (int)$_GET['recetteId']);
+    if (isset($_GET['action']) && $_GET['action'] === 'supprimerRecette' && isset($_GET['tre_rec_id'])) {
+        deleteTagsRecette($pdo, (int)$_GET['tre_rec_id']);
         deleteOneRecette($pdo);
         $message = "Recette supprimée avec succès";
         $messageType = "success";
@@ -263,20 +263,20 @@ elseif (str_starts_with($uri, "/admVoirUser") && isset($_GET['id'])) {
 
     // Bannissement du compte
     if (isset($_GET['action']) && $_GET['action'] === 'suspendre') {
-        suspendreUtilisateur($pdo, (int)$_GET['id']);
+        suspendreUtilisateur($pdo, (int)$_GET['uti_id']);
         $message = "Utilisateur suspendu avec succès";
         $messageType = "success";
     }
 
     // Réactivation du compte
     if (isset($_GET['action']) && $_GET['action'] === 'reactiver') {
-        reactiverUtilisateur($pdo, (int)$_GET['id']);
+        reactiverUtilisateur($pdo, (int)$_GET['uti_id']);
         $message = "Utilisateur réactivé avec succès";
         $messageType = "success";
     }
 
-    $userVu = getUserById($pdo, (int)$_GET['id']);
-    $recettes = getRecettesByUserId($pdo, (int)$_GET['id']);
+    $userVu = getUserById($pdo, (int)$_GET['uti_id']);
+    $recettes = getRecettesByUserId($pdo, (int)$_GET['uti_id']);
 
     $title = "Voir l'utilisateur";
     $template = "Views/Gestion/voirUser.php";

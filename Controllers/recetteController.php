@@ -68,7 +68,7 @@ if ($uri === "/mesRecettes") {
     $messageSuccess = null;
 
     if (isset($_POST["btnEnvoi"])) {
-        $recetteId = insertRecette($pdo);
+        $tre_rec_id = insertRecette($pdo);
         header("Location: /");
         exit();
     }
@@ -98,12 +98,12 @@ if ($uri === "/mesRecettes") {
 |
 | L'id de la recette est récupéré dans l'URL via le paramètre GET.
 | Exemple :
-| /voirRecette?recetteId=5
+| /voirRecette?tre_rec_id=5
 |
 | Les informations récupérées sont :
 | - les données de la recette
 | - les tags associés à la recette
-*/ elseif (isset($_GET["recetteId"]) && str_starts_with($uri, "/voirrecette")) {
+*/ elseif (isset($_GET["tre_rec_id"]) && str_starts_with($uri, "/voirrecette")) {
 
     $recette = selectOneRecette($pdo);
     $tags = selectTagsActiveRecette($pdo);
@@ -126,7 +126,7 @@ if ($uri === "/mesRecettes") {
 | 2. Mise à jour des informations de la recette
 | 3. Suppression des anciens tags
 | 4. Ajout des nouveaux tags sélectionnés
-*/ elseif (isset($_GET["recetteId"]) && strpos($uri, "/modifierRecette") === 0) {
+*/ elseif (isset($_GET["tre_rec_id"]) && strpos($uri, "/modifierRecette") === 0) {
 
     $messageSuccess = null;
 
@@ -140,10 +140,10 @@ if ($uri === "/mesRecettes") {
 
         updateRecette($pdo);
 
-        deleteTagsRecette($pdo, (int)$_GET["recetteId"]);
+        deleteTagsRecette($pdo, (int)$_GET["tre_rec_id"]);
 
-        foreach ($_POST["tags"] ?? [] as $tagId) {
-            ajouterTagsRecette($pdo, (int)$_GET["recetteId"], (int)$tagId);
+        foreach ($_POST["tags"] ?? [] as $tre_tag_id) {
+            ajouterTagsRecette($pdo, (int)$_GET["tre_rec_id"], (int)$tre_tag_id);
         }
 
         // On recharge pour afficher les données à jour
@@ -170,7 +170,7 @@ if ($uri === "/mesRecettes") {
 | 2. Si l'utilisateur confirme :
 |    - suppression des tags associés
 |    - suppression de la recette
-*/ elseif (isset($_GET["recetteId"]) && strpos($uri, "/supprimerRecette") === 0) {
+*/ elseif (isset($_GET["tre_rec_id"]) && strpos($uri, "/supprimerRecette") === 0) {
 
     $recette = selectOneRecette($pdo);
 
@@ -178,7 +178,7 @@ if ($uri === "/mesRecettes") {
 
     if (isset($_POST['confirmerSuppression'])) {
 
-        deleteTagsRecette($pdo, (int)$_GET["recetteId"]);
+        deleteTagsRecette($pdo, (int)$_GET["tre_rec_id"]);
         deleteOneRecette($pdo);
 
         header("Location: /mesRecettes");

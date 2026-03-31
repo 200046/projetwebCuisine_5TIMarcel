@@ -7,7 +7,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Nom</th>
-                    <th>Prénom</th>
+                    <th>Précat_nom</th>
                     <th>Login</th>
                     <th>Email</th>
                     <th>Nb Recettes</th>
@@ -16,14 +16,14 @@
             </thead>
             <tbody>
                 <?php foreach ($utilisateursData as $data): ?>
-                    <?php if ($data['estSuspendu']): ?>
+                    <?php if ($data['uti_est_suspendu']): ?>
                         <?php $suspendusTrouves = true; ?>
                         <?php $user = $data['user']; ?>
                         <tr>
-                            <td><?= $user->id ?></td>
-                            <td><?= htmlspecialchars($user->nomUser) ?></td>
-                            <td><?= htmlspecialchars($user->prenomUser) ?></td>
-                            <td><?= htmlspecialchars($user->loginUser) ?></td>
+                            <td><?= $user->uti_id ?></td>
+                            <td><?= htmlspecialchars($user->uti_cat_nom) ?></td>
+                            <td><?= htmlspecialchars($user->preuti_cat_nom) ?></td>
+                            <td><?= htmlspecialchars($user->uti_login) ?></td>
                             <td><?= $data['nbRecettes'] ?></td>
                             <td><span class="badge badge-suspendu">Suspendu</span></td>
                         </tr>

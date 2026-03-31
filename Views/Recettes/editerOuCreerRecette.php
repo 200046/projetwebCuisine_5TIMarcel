@@ -7,41 +7,41 @@
             <div class="mb-3">
                 <label class="form-label">Titre</label>
                 <input type="text" name="titre" class="form-control"
-                <?php if(isset($recette)) : ?> value="<?= $recette->recetteTitre ?>" <?php endif ?>>
+                <?php if(isset($recette)) : ?> value="<?= $recette->rec_titre ?>" <?php endif ?>>
             </div>
 
             <!-- Description -->
             <div class="mb-3">
                 <label class="form-label">Description</label>
-                <textarea name="description" class="form-control"><?php if(isset($recette)) echo $recette->recetteDescription; ?></textarea>
+                <textarea name="description" class="form-control"><?php if(isset($recette)) echo $recette->rec_description; ?></textarea>
             </div>
 
             <!-- Ingrédients -->
             <div class="mb-3">
                 <label class="form-label">Ingrédients</label>
-                <textarea name="ingredients" class="form-control"><?php if(isset($recette)) echo $recette->recetteIngredients; ?></textarea>
+                <textarea name="ingredients" class="form-control"><?php if(isset($recette)) echo $recette->rec_ingredients; ?></textarea>
             </div>
 
             <!-- Etapes -->
             <div class="mb-3">
                 <label class="form-label">Etapes</label>
-                <textarea name="etapes" class="form-control"><?php if(isset($recette)) echo $recette->recetteEtapes; ?></textarea>
+                <textarea name="etapes" class="form-control"><?php if(isset($recette)) echo $recette->rec_etapes; ?></textarea>
             </div>
 
             <!-- Temps préparation -->
             <div class="mb-3">
                 <label class="form-label">Temps préparation (min)</label>
                 <input type="number" name="temps_preparation" class="form-control"
-                <?php if(isset($recette)) : ?> value="<?= $recette->recetteTempsPreparation ?>" <?php endif ?>>
+                <?php if(isset($recette)) : ?> value="<?= $recette->rec_temps_preparation ?>" <?php endif ?>>
             </div>
 
             <!-- Difficulté -->
             <div class="mb-3">
                 <label class="form-label">Difficulté</label>
                 <select name="difficulte" class="form-control">
-                    <option value="facile" <?= isset($recette) && $recette->recetteDifficulte == "facile" ? "selected" : "" ?>>Facile</option>
-                    <option value="moyen" <?= isset($recette) && $recette->recetteDifficulte == "moyen" ? "selected" : "" ?>>Moyen</option>
-                    <option value="difficile" <?= isset($recette) && $recette->recetteDifficulte == "difficile" ? "selected" : "" ?>>Difficile</option>
+                    <option value="facile" <?= isset($recette) && $recette->rec_difficulte == "facile" ? "selected" : "" ?>>Facile</option>
+                    <option value="moyen" <?= isset($recette) && $recette->rec_difficulte == "moyen" ? "selected" : "" ?>>Moyen</option>
+                    <option value="difficile" <?= isset($recette) && $recette->rec_difficulte == "difficile" ? "selected" : "" ?>>Difficile</option>
                 </select>
             </div>
 
@@ -49,17 +49,17 @@
             <div class="mb-3">
                 <label class="form-label">Image (url)</label>
                 <input type="text" name="image" class="form-control"
-                <?php if(isset($recette)) : ?> value="<?= $recette->recetteImage ?>" <?php endif ?>>
+                <?php if(isset($recette)) : ?> value="<?= $recette->rec_image ?>" <?php endif ?>>
             </div>
 
             <!-- Catégorie -->
             <div class="mb-3">
                 <label class="form-label">Catégorie</label>
-                <select name="categorieId" class="form-control">
+                <select name="rec_cat_id" class="form-control">
                     <?php foreach($categories as $categorie) : ?>
-                        <option value="<?= $categorie->categorieId ?>"
-                        <?= isset($recette) && $recette->categorieId == $categorie->categorieId ? "selected" : "" ?>>
-                            <?= $categorie->nom ?>
+                        <option value="<?= $categorie->rec_cat_id ?>"
+                        <?= isset($recette) && $recette->rec_cat_id == $categorie->rec_cat_id ? "selected" : "" ?>>
+                            <?= $categorie->cat_nom ?>
                         </option>
                     <?php endforeach ?>
                 </select>
@@ -70,15 +70,15 @@
                 <label class="form-label">Tags</label>
                 <?php foreach($tags as $tag) : ?>
                     <div>
-                        <input type="checkbox" name="tags[]" value="<?= $tag->tagId ?>"
+                        <input type="checkbox" name="tags[]" value="<?= $tag->tre_tag_id ?>"
                         <?php
                         if(isset($tagsActiveRecette)) {
                             foreach($tagsActiveRecette as $tagActive) {
-                                if($tagActive->tagId == $tag->tagId) echo "checked";
+                                if($tagActive->tre_tag_id == $tag->tre_tag_id) echo "checked";
                             }
                         }
                         ?>>
-                        <?= $tag->nom ?>
+                        <?= $tag->cat_nom ?>
                     </div>
                 <?php endforeach ?>
             </div>

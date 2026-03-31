@@ -14,7 +14,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Nom</th>
-                    <th>Prénom</th>
+                    <th>Précat_nom</th>
                     <th>Login</th>
                     <th>Email</th>
                     <th>Rôle</th>
@@ -25,49 +25,49 @@
             <tbody>
                 <?php foreach ($utilisateursData as $data): ?>
                     <?php $user = $data['user']; ?>
-                    <tr class="<?= $data['estSuspendu'] ? 'suspendu' : '' ?>">
-                        <td><?= $user->id ?></td>
-                        <td><?= htmlspecialchars($user->nomUser) ?></td>
-                        <td><?= htmlspecialchars($user->prenomUser) ?></td>
-                        <td><?= htmlspecialchars($user->loginUser) ?></td>
-                        <td><?= htmlspecialchars($user->emailUser) ?></td>
+                    <tr class="<?= $data['uti_est_suspendu'] ? 'suspendu' : '' ?>">
+                        <td><?= $user->uti_id ?></td>
+                        <td><?= htmlspecialchars($user->uti_cat_nom) ?></td>
+                        <td><?= htmlspecialchars($user->preuti_cat_nom) ?></td>
+                        <td><?= htmlspecialchars($user->uti_login) ?></td>
+                        <td><?= htmlspecialchars($user->uti_email) ?></td>
                         <td>
-                            <?php if ($user->role === 'admin'): ?>
+                            <?php if ($user->uti_role === 'admin'): ?>
                                 <span class="badge badge-admin">Admin</span>
-                            <?php elseif ($user->role === 'moderateur'): ?>
+                            <?php elseif ($user->uti_role === 'moderateur'): ?>
                                 <span class="badge badge-moderateur">Modérateur</span>
                             <?php else: ?>
                                 <span class="badge badge-user">Utilisateur</span>
                             <?php endif; ?>
                         </td>
                         <td>
-                            <?php if ($data['estSuspendu']): ?>
+                            <?php if ($data['uti_est_suspendu']): ?>
                                 <span class="badge badge-suspendu">Suspendu</span>
                             <?php else: ?>
                                 <span class="badge badge-actif">Actif</span>
                             <?php endif; ?>
                         </td>
                         <td class="actions">
-                            <?php if ($user->id != $_SESSION["utilisateur"]->id): ?>
-                                <?php if ($data['estSuspendu']): ?>
-                                    <a href="?action=reactiver&id=<?= $user->id ?>" class="btn-reactiv">
+                            <?php if ($user->uti_id != $_SESSION["utilisateur"]->uti_id): ?>
+                                <?php if ($data['uti_est_suspendu']): ?>
+                                    <a href="?action=reactiver&id=<?= $user->uti_id ?>" class="btn-reactiv">
                                         <img class="btn-img" src="../../Assets/Images/activate.png" alt="Activate">
                                     </a>
                                 <?php else: ?>
-                                    <a href="?action=suspendre&id=<?= $user->id ?>" class="btn-suspend">
+                                    <a href="?action=suspendre&id=<?= $user->uti_id ?>" class="btn-suspend">
                                         <img class="btn-img" src="../../Assets/Images/banned.png" alt="Banned">
                                     </a>
                                 <?php endif; ?>
 
-                                <?php if ($user->role === 'moderateur'): ?>
-                                    <a href="?action=retrograder&id=<?= $user->id ?>" class="btn-retrograder">
+                                <?php if ($user->uti_role === 'moderateur'): ?>
+                                    <a href="?action=retrograder&id=<?= $user->uti_id ?>" class="btn-retrograder">
                                         <img class="btn-img" src="../../Assets/Images/down.png" alt="Retrograder">
                                     </a>
-                                <?php elseif ($user->role === 'user'): ?>
-                                    <a href="?action=promouvoir&id=<?= $user->id ?>" class="btn-promouvoir">
+                                <?php elseif ($user->uti_role === 'user'): ?>
+                                    <a href="?action=promouvoir&id=<?= $user->uti_id ?>" class="btn-promouvoir">
                                         <img class="btn-img" src="../../Assets/Images/up.png" alt="Promouvoir">
                                     </a> <?php endif; ?>
-                                <a href="/admVoirUser?id=<?= $user->id ?>" class="btn-promouvoir">
+                                <a href="/admVoirUser?id=<?= $user->uti_id ?>" class="btn-promouvoir">
                                     <img class="btn-img" src="../../Assets/Images/oeil.png" alt="Voir">
                                 </a>
                             <?php else: ?>

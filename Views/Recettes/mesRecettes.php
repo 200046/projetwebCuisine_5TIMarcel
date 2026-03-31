@@ -16,17 +16,17 @@ if (!$recettes) {
     <?php foreach ($recettes as $recette) : ?>
         <?php
         // Vérifie que la recette appartient à l'utilisateur connecté
-        if (!isset($_SESSION["utilisateur"]) || (int)$recette->utilisateurId !== (int)$_SESSION["utilisateur"]->id) {
+        if (!isset($_SESSION["utilisateur"]) || (int)$recette->rec_uti_id !== (int)$_SESSION["utilisateur"]->uti_id) {
             continue;
         }
         ?>
 
         <div class="border card">
-            <h2 class="center"><?= htmlspecialchars($recette->recetteTitre) ?></h2>
+            <h2 class="center"><?= htmlspecialchars($recette->rec_titre) ?></h2>
 
             <div class="flexible discImageEcole">
-                <?php if (!empty($recette->recetteImage)) : ?>
-                    <img src="<?= htmlspecialchars($recette->recetteImage) ?>" alt="Photo de la recette">
+                <?php if (!empty($recette->rec_image)) : ?>
+                    <img src="<?= htmlspecialchars($recette->rec_image) ?>" alt="Photo de la recette">
                 <?php else : ?>
                     <p>Aucune image disponible</p>
                 <?php endif; ?>
@@ -34,21 +34,21 @@ if (!$recettes) {
 
             <div class="center">
                 <p>
-                    <span><?= htmlspecialchars($recette->recetteDifficulte) ?></span> -
-                    <span><?= (int)$recette->recetteTempsPreparation ?></span> min,
+                    <span><?= htmlspecialchars($recette->rec_difficulte) ?></span> -
+                    <span><?= (int)$recette->rec_temps_preparation ?></span> min,
                     <?= htmlspecialchars($recette->recetteCategorie ?? "Non catégorisée") ?>
                 </p>
 
                 <h3>
-                    <a href="/voirRecette?recetteId=<?= (int)$recette->recetteId ?>" class="btn btn-page">
+                    <a href="/voirRecette?tre_rec_id=<?= (int)$recette->tre_rec_id ?>" class="btn btn-page">
                         Voir la recette
                     </a>
                 </h3>
 
                 <!-- Boutons visibles uniquement pour le propriétaire -->
                 <p>
-                    <a href="/modifierRecette?recetteId=<?= (int)$recette->recetteId ?>" class="btn btn-warning">Modifier</a>
-                    <a href="/supprimerRecette?recetteId=<?= (int)$recette->recetteId ?>" class="btn btn-danger" 
+                    <a href="/modifierRecette?tre_rec_id=<?= (int)$recette->tre_rec_id ?>" class="btn btn-warning">Modifier</a>
+                    <a href="/supprimerRecette?tre_rec_id=<?= (int)$recette->tre_rec_id ?>" class="btn btn-danger" 
                        onclick="return confirm('Voulez-vous vraiment supprimer cette recette ?');">
                         Supprimer
                     </a>

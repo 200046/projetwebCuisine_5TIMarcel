@@ -1,7 +1,7 @@
 <div class="admin-container">
 
     <div class="admin-header">
-        <h1>Profil de <?= htmlspecialchars($userVu->prenomUser) ?> <?= htmlspecialchars($userVu->nomUser) ?></h1>
+        <h1>Profil de <?= htmlspecialchars($userVu->preuti_cat_nom) ?> <?= htmlspecialchars($userVu->uti_cat_nom) ?></h1>
         <a href="/administration" class="btn-reactiv">← Retour</a>
     </div>
 
@@ -14,8 +14,8 @@
     <!-- Infos utilisateur -->
     <div class="users-section">
         <h2>Informations</h2>
-        <p><strong>Login :</strong> <?= htmlspecialchars($userVu->loginUser) ?></p>
-        <p><strong>Rôle :</strong> <?= htmlspecialchars($userVu->role) ?></p>
+        <p><strong>Login :</strong> <?= htmlspecialchars($userVu->uti_login) ?></p>
+        <p><strong>Rôle :</strong> <?= htmlspecialchars($userVu->uti_role) ?></p>
     </div>
 
     <!-- Recettes de l'utilisateur -->
@@ -38,13 +38,13 @@
                 <tbody>
                     <?php foreach ($recettes as $recette): ?>
                         <tr>
-                            <td><?= $recette->recetteId ?></td>
-                            <td><?= htmlspecialchars($recette->recetteTitre) ?></td>
-                            <td><?= htmlspecialchars($recette->recetteDifficulte) ?></td>
-                            <td><?= $recette->recetteTempsPreparation ?></td>
+                            <td><?= $recette->tre_rec_id ?></td>
+                            <td><?= htmlspecialchars($recette->rec_titre) ?></td>
+                            <td><?= htmlspecialchars($recette->rec_difficulte) ?></td>
+                            <td><?= $recette->rec_temps_preparation ?></td>
                             <td class="actions">
-                                <a href="/voirrecette?recetteId=<?= $recette->recetteId ?>" class="btn-promouvoir">Voir</a>
-                                <a href="?id=<?= $userVu->id ?>&action=supprimerRecette&recetteId=<?= $recette->recetteId ?>" class="btn-suspend">
+                                <a href="/voirrecette?tre_rec_id=<?= $recette->tre_rec_id ?>" class="btn-promouvoir">Voir</a>
+                                <a href="?id=<?= $userVu->uti_id ?>&action=supprimerRecette&tre_rec_id=<?= $recette->tre_rec_id ?>" class="btn-suspend">
                                     Supprimer
                                 </a>
 

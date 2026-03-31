@@ -8,7 +8,7 @@
 
             <p>
                 Voulez vous vraiment supprimer la recette :
-                <strong><?= $recette->recetteTitre ?></strong> ?
+                <strong><?= $recette->rec_titre ?></strong> ?
             </p>
 
             <button class="btn btn-danger" name="confirmerSuppression">

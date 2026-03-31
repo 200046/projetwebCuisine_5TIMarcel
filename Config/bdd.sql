@@ -1,121 +1,148 @@
+-- 1. Effacer l'existant (Recommandé par le document [cite: 2])
+DROP TABLE IF EXISTS tag_recette;
+DROP TABLE IF EXISTS tag;
+DROP TABLE IF EXISTS recette;
+DROP TABLE IF EXISTS categorie;
+DROP TABLE IF EXISTS utilisateur;
+
+-- 2. Création des tables
 CREATE TABLE utilisateur (
-  id INT NOT NULL AUTO_INCREMENT,
-  nomUser VARCHAR(255) NOT NULL,
-  prenomUser VARCHAR(25) NOT NULL,
-  loginUser VARCHAR(25) NOT NULL,
-  passWordUser VARCHAR(25) NOT NULL,
-  role VARCHAR(255) DEFAULT 'user',
-  emailUser VARCHAR(40),
-  estSuspendu TINYINT(1) NOT NULL DEFAULT 0 COMMENT '0 = actif, 1 = suspendu',
-  PRIMARY KEY (id)
+  uti_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  uti_nom VARCHAR(255) NOT NULL,
+  uti_prenom VARCHAR(255) NOT NULL,
+  uti_login VARCHAR(25) NOT NULL,
+  uti_motdepasse VARCHAR(255) NOT NULL, -- "uti_motdepasse" utilisé dans l'exemple 
+  uti_role VARCHAR(50) NOT NULL DEFAULT 'user',
+  uti_email VARCHAR(150) NOT NULL UNIQUE,
+  uti_est_suspendu TINYINT(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-INSERT INTO utilisateur (nomUser, prenomUser, loginUser, passWordUser, role, emailUser) VALUES
-('CELOUMAR', 'ADMIN', 'celoumar', 'celoumar', 'admin', 'celoumar@gmail.com'),
-('MARCELOU', 'USER', 'marcelou', 'marcelou', 'user', 'marcelou@gmail.com'),
-('Dupont', 'Alice', 'alice', 'alice123', 'user', 'alice@gmail.com'),
-('Martin', 'Lucas', 'lucas', 'lucas123', 'user', 'lucas@gmail.com'),
-('Durand', 'Emma', 'emma', 'emma123', 'user', 'emma@gmail.com'),
-('Petit', 'Noah', 'noah', 'noah123', 'user', 'noah@gmail.com'),
-('Robert', 'Lina', 'lina', 'lina123', 'user', 'lina@gmail.com'),
-('Moreau', 'Tom', 'tom', 'tom123', 'user', 'tom@gmail.com'),
-('Fournier', 'Sarah', 'sarah', 'sarah123', 'user', 'sarah@gmail.com'),
-('Girard', 'Leo', 'leo', 'leo123', 'user', 'leo@gmail.com'),
-('Andre', 'Julie', 'julie', 'julie123', 'user', 'julie@gmail.com'),
-('Mercier', 'Max', 'max', 'max123', 'user', 'max@gmail.com'),
-('Blanc', 'Nina', 'nina', 'nina123', 'user', 'nina@gmail.com'),
-('Faure', 'Paul', 'paul', 'paul123', 'user', 'paul@gmail.com'),
-('Roux', 'Eva', 'eva', 'eva123', 'user', 'eva@gmail.com'),
-('Vincent', 'Hugo', 'hugo', 'hugo123', 'user', 'hugo@gmail.com'),
-('Henry', 'Clara', 'clara', 'clara123', 'user', 'clara@gmail.com'),
-('Boyer', 'Ethan', 'ethan', 'ethan123', 'user', 'ethan@gmail.com'),
-('Garnier', 'Lola', 'lola', 'lola123', 'user', 'lola@gmail.com'),
-('Lefevre', 'Nathan', 'nathan', 'nathan123', 'user', 'nathan@gmail.com'),
-('Perez', 'Chloe', 'chloe', 'chloe123', 'user', 'chloe@gmail.com');
 CREATE TABLE categorie (
-  categorieId INT NOT NULL AUTO_INCREMENT,
-  nom VARCHAR(255) NOT NULL,
-  PRIMARY KEY (categorieId)
+  cat_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  cat_nom VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-INSERT INTO categorie (nom) VALUES
-('Entrée'), ('Plat principal'), ('Dessert'), ('Apéritif'), ('Boisson'), ('Sauce'), ('Accompagnement'), ('Petit-déjeuner'), ('Brunch'), ('Snack'), ('Fast-food'), ('Cuisine du monde'), ('Vegan'), ('Bio'), ('Sans lactose'), ('Pâtisserie'), ('Barbecue'), ('Soupe'), ('Salade'), ('Repas de fête');
 
 CREATE TABLE tag (
-  tagId INT NOT NULL AUTO_INCREMENT,
-  nom VARCHAR(255) NOT NULL,
-  PRIMARY KEY (tagId)
+  tag_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tag_nom VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-INSERT INTO tag (nom) VALUES
-('végétarien'), ('végétalien'), ('sans gluten'), ('rapide'), ('économique'), ('healthy'), ('comfort food'), ('épicé'), ('sucré'), ('salé'), ('saison'), ('été'), ('hiver'), ('printemps'), ('automne'), ('français'), ('italien'), ('asiatique'), ('mexicain'), ('oriental');
+
 CREATE TABLE recette (
-  recetteId INT NOT NULL AUTO_INCREMENT,
-  recetteTitre VARCHAR(255) NOT NULL,
-  recetteDescription TEXT,
-  recetteIngredients TEXT NOT NULL,
-  recetteEtapes TEXT NOT NULL,
-  recetteTempsPreparation INT NOT NULL,
-  recetteDifficulte VARCHAR(25) NOT NULL,
-  recetteImage VARCHAR(255),
-  utilisateurId INT
-  categorieId INT,
-  PRIMARY KEY (recetteId),
-  FOREIGN KEY (utilisateurId) REFERENCES utilisateur(id),
-  FOREIGN KEY (categorieId) REFERENCES categorie(categorieId)
-);
-
--- ... (tables utilisateur, categorie, tag inchangées)
-
-INSERT INTO recette 
-(recetteTitre, recetteDescription, recetteIngredients, recetteImage, recetteEtapes, recetteTempsPreparation, recetteDifficulte, utilisateurId, categorieId)
-VALUES
-('Pâtes carbonara', 'Classique italien', 'Pâtes\nLardons\nŒufs\nCrème', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire les pâtes\nMélanger\nServir', 25, 'facile', 2, 2),
-('Gâteau chocolat', 'Moelleux', 'Chocolat\nBeurre\nŒufs\nSucre', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Mélanger\nCuire', 40, 'facile', 3, 3),
-('Salade César', 'Fraîche', 'Salade\nPoulet\nParmesan', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Assembler', 20, 'facile', 4, 19),
-('Quiche lorraine', 'Traditionnelle', 'Œufs\nCrème\nLardons', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire au four', 50, 'moyen', 5, 2),
-('Smoothie fruits', 'Vitaminé', 'Fruits\nYaourt', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Mixer', 10, 'facile', 6, 5),
-('Burger maison', 'Gourmand', 'Pain\nSteak\nFromage', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Assembler', 25, 'facile', 7, 11),
-('Soupe légumes', 'Réconfortante', 'Légumes\nBouillon', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire\nMixer', 45, 'facile', 8, 18),
-('Pizza maison', 'Personnalisée', 'Pâte\nTomate\nFromage', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire', 60, 'moyen', 9, 2),
-('Cookies', 'Gourmands', 'Farine\nChocolat', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire', 30, 'facile', 10, 16),
-('Omelette', 'Rapide', 'Œufs\nFromage', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire', 10, 'facile', 11, 10),
-('Risotto', 'Crémeux', 'Riz\nBouillon', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Remuer', 45, 'moyen', 12, 2),
-('Crêpes', 'Sucrées', 'Farine\nLait\nŒufs', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire', 30, 'facile', 13, 8),
-('Curry légumes', 'Vegan', 'Légumes\nCurry', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Mijoter', 40, 'moyen', 14, 13),
-('Salade fruits', 'Fraîche', 'Fruits', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Couper', 15, 'facile', 15, 3),
-('Gratin dauphinois', 'Fondant', 'Pommes de terre\nCrème', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire', 70, 'moyen', 16, 2),
-('Wrap poulet', 'Lunch', 'Wrap\nPoulet', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Assembler', 15, 'facile', 17, 10),
-('Muffins', 'Moelleux', 'Farine\nSucre', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Cuire', 35, 'facile', 18, 16),
-('Chili con carne', 'Épicé', 'Bœuf\nHaricots', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Mijoter', 60, 'moyen', 19, 12),
-('Tacos', 'Mexicain', 'Tortilla\nBœuf', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Assembler', 30, 'facile', 20, 11),
-('Soupe miso', 'Asiatique', 'Miso\nTofu', 'https://img-3.journaldesfemmes.fr/URL_IMAGE.jpg', 'Chauffer', 20, 'facile', 2, 18);
+  rec_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  rec_titre VARCHAR(255) NOT NULL,
+  rec_description TEXT,
+  rec_ingredients TEXT NOT NULL,
+  rec_etapes TEXT NOT NULL,
+  rec_temps_preparation INT NOT NULL,
+  rec_difficulte VARCHAR(25) NOT NULL,
+  rec_image VARCHAR(255),
+  rec_uti_id INT, -- Préfixe + nom explicite 
+  rec_cat_id INT,
+  FOREIGN KEY (rec_uti_id) REFERENCES utilisateur(uti_id),
+  FOREIGN KEY (rec_cat_id) REFERENCES categorie(cat_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 CREATE TABLE tag_recette (
-  tagRecetteId INT NOT NULL AUTO_INCREMENT,
-  recetteId INT,
-  tagId INT,
-  PRIMARY KEY (tagRecetteId),
-  FOREIGN KEY (recetteId) REFERENCES recette(recetteId),
-  FOREIGN KEY (tagId) REFERENCES tag(tagId)
+  tre_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tre_rec_id INT,
+  tre_tag_id INT,
+  FOREIGN KEY (tre_rec_id) REFERENCES recette(rec_id),
+  FOREIGN KEY (tre_tag_id) REFERENCES tag(tag_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-INSERT INTO tag_recette (recetteId, tagId) VALUES
-(1,17),
-(2,9),
-(3,6),
-(4,16),
-(5,4),
-(6,7),
-(7,13),
-(8,7),
-(9,9),
-(10,4),
-(11,7),
-(12,9),
-(13,2),
-(14,6),
-(15,7),
-(16,4),
-(17,9),
-(18,8),
-(19,19),
-(20,18);
+-- =========================
+-- UTILISATEURS (20+)
+-- =========================
+INSERT INTO utilisateur (uti_nom, uti_prenom, uti_login, uti_motdepasse, uti_role, uti_email) VALUES
+('Admin', 'Root', 'celoumar', 'celoumar', 'admin', 'admin@site.com'),
+
+('Dupont','Jean','jdupont','1234','user','jean1@mail.com'),
+('Martin','Claire','cmartin','1234','user','claire@mail.com'),
+('Durand','Paul','pdurand','1234','user','paul@mail.com'),
+('Bernard','Julie','jbernard','1234','user','julie@mail.com'),
+('Petit','Lucas','lpetit','1234','user','lucas@mail.com'),
+('Robert','Emma','erobert','1234','user','emma@mail.com'),
+('Richard','Hugo','hrichard','1234','user','hugo@mail.com'),
+('Moreau','Chloe','cmoreau','1234','user','chloe@mail.com'),
+('Simon','Louis','lsimon','1234','user','louis@mail.com'),
+('Laurent','Lea','llaurent','1234','user','lea@mail.com'),
+('Lefebvre','Tom','tlefebvre','1234','user','tom@mail.com'),
+('Michel','Manon','mmichel','1234','user','manon@mail.com'),
+('Garcia','Nina','ngarcia','1234','user','nina@mail.com'),
+('David','Leo','ldavid','1234','user','leo@mail.com'),
+('Bertrand','Eva','ebertrand','1234','user','eva@mail.com'),
+('Roux','Noah','nroux','1234','user','noah@mail.com'),
+('Vincent','Lina','lvincent','1234','user','lina@mail.com'),
+('Fournier','Adam','afournier','1234','user','adam@mail.com'),
+('Morel','Jade','jmorel','1234','user','jade@mail.com'),
+('Girard','Ethan','egirard','1234','user','ethan@mail.com');
+
+-- =========================
+-- CATEGORIES (20)
+-- =========================
+INSERT INTO categorie (cat_nom) VALUES
+('Entrée'),('Plat'),('Dessert'),('Boisson'),('Végétarien'),
+('Vegan'),('Rapide'),('Healthy'),('Snack'),('Petit-déjeuner'),
+('Pâtes'),('Viande'),('Poisson'),('Salade'),('Soupe'),
+('BBQ'),('Italien'),('Asiatique'),('Fast-food'),('Gourmand');
+
+-- =========================
+-- TAGS (20)
+-- =========================
+INSERT INTO tag (tag_nom) VALUES
+('facile'),('rapide'),('pas cher'),('épicé'),('sucré'),
+('salé'),('sans gluten'),('bio'),('maison'),('light'),
+('protéiné'),('healthy'),('traditionnel'),('moderne'),('fête'),
+('été'),('hiver'),('express'),('gourmet'),('comfort food');
+
+-- =========================
+-- RECETTES (20)
+-- =========================
+INSERT INTO recette 
+(rec_titre, rec_description, rec_ingredients, rec_etapes, rec_temps_preparation, rec_difficulte, rec_uti_id, rec_cat_id) VALUES
+
+('Pâtes carbo','Classique italienne','pâtes,lardons,crème','cuire,mélanger',20,'facile',1,11),
+('Salade César','Fraîche et rapide','salade,poulet,parmesan','mélanger',15,'facile',2,14),
+('Burger maison','Délicieux burger','pain,steak,salade','cuire,assembler',25,'moyen',3,19),
+('Pizza margarita','Simple','pâte,tomate,mozza','cuire',30,'facile',4,17),
+('Soupe légumes','Healthy','légumes,eau','cuire,mixer',40,'facile',5,15),
+('Tiramisu','Dessert italien','mascarpone,café','monter',35,'moyen',6,3),
+('Crêpes','Classique','farine,lait,oeufs','mélanger,cuire',20,'facile',7,10),
+('Omelette','Rapide','oeufs,sel','cuire',10,'facile',8,7),
+('Poulet rôti','Savoureux','poulet,épices','cuire',60,'moyen',9,12),
+('Sushi','Japonais','riz,poisson','assembler',50,'difficile',10,18),
+('Tacos','Mexicain','tortilla,viande','assembler',20,'facile',11,19),
+('Lasagnes','Italien','pâtes,bolognaise','cuire',70,'moyen',12,17),
+('Smoothie','Boisson fruitée','fruits,lait','mixer',5,'facile',13,4),
+('Salade fruits','Frais','fruits','couper',10,'facile',14,3),
+('Steak frites','Classique','viande,pommes','cuire',30,'facile',15,12),
+('Quiche','Maison','oeufs,crème','cuire',45,'moyen',16,2),
+('Ramen','Asiatique','nouilles,bouillon','cuire',50,'moyen',17,18),
+('Wrap','Snack','tortilla,poulet','assembler',15,'facile',18,9),
+('Brownie','Chocolat','chocolat,farine','cuire',35,'facile',19,3),
+('Glace maison','Dessert froid','lait,sucre','congeler',120,'moyen',20,3);
+
+-- =========================
+-- TAG_RECETTE (20+)
+-- =========================
+INSERT INTO tag_recette (tre_rec_id, tre_tag_id) VALUES
+(1,1),(1,2),
+(2,2),(2,10),
+(3,3),(3,19),
+(4,1),(4,14),
+(5,8),(5,12),
+(6,5),(6,19),
+(7,1),(7,5),
+(8,2),(8,1),
+(9,13),(9,16),
+(10,14),(10,19),
+(11,3),(11,4),
+(12,13),(12,19),
+(13,2),(13,12),
+(14,5),(14,10),
+(15,13),(15,6),
+(16,13),(16,9),
+(17,14),(17,17),
+(18,2),(18,9),
+(19,5),(19,19),
+(20,5),(20,16);

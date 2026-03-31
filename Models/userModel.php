@@ -18,14 +18,14 @@ function connectUser($pdo) {
     try {
 
         $query = 'SELECT * FROM utilisateur 
-                  WHERE loginUser = :loginUser 
-                  AND passWordUser = :passWordUser';
+                  WHERE uti_login = :uti_login 
+                  AND uti_motdepasse = :uti_motdepasse';
 
         $connectUser = $pdo->prepare($query);
 
         $connectUser->execute([
-            'loginUser' => $_POST['login'],
-            'passWordUser' => $_POST['mot_de_passe']
+            'uti_login' => $_POST['login'],
+            'uti_motdepasse' => $_POST['mot_de_passe']
         ]);
 
         $user = $connectUser->fetch(PDO::FETCH_OBJ);
@@ -35,7 +35,7 @@ function connectUser($pdo) {
         }
         
         // Vérifier si le compte est suspendu
-        if ($user->estSuspendu == 1) {
+        if ($user->uti_est_suspendu == 1) {
             return "suspendu";
         }
         
@@ -63,19 +63,19 @@ function createUser($pdo) {
     try {
 
         $query = 'INSERT INTO utilisateur 
-                  (nomUser, prenomUser, loginUser, passWordUser, emailUser, role, estSuspendu) 
+                  (uti_nom, uti_prenom, uti_login, uti_motdepasse, uti_email, uti_role, uti_est_suspendu) 
                   VALUES 
-                  (:nomUser, :prenomUser, :loginUser, :passWordUser, :emailUser, :role, 0)';
+                  (:uti_nom, :uti_prenom, :uti_login, :uti_motdepasse, :uti_email, :uti_role, 0)';
 
         $createUser = $pdo->prepare($query);
 
         $createUser->execute([
-            'nomUser' => $_POST["nom"],
-            'prenomUser' => $_POST["prenom"],
-            'loginUser' => $_POST["login"],
-            'passWordUser' => $_POST["mot_de_passe"],
-            'emailUser' => $_POST["email"],
-            'role' => 'user'
+            'uti_nom'        => $_POST["nom"],
+            'uti_prenom'     => $_POST["prenom"],
+            'uti_login'      => $_POST["login"],
+            'uti_motdepasse' => $_POST["mot_de_passe"],
+            'uti_email'      => $_POST["email"],
+            'uti_role'       => 'user'
         ]);
 
         return true;
@@ -97,20 +97,20 @@ function updateUser($pdo) {
     try {
 
         $query = 'UPDATE utilisateur 
-                  SET nomUser = :nomUser, 
-                      prenomUser = :prenomUser, 
-                      passWordUser = :passWordUser, 
-                      emailUser = :emailUser
-                  WHERE id = :id';
+                  SET uti_nom = :uti_nom, 
+                      uti_prenom = :uti_prenom, 
+                      uti_motdepasse = :uti_motdepasse, 
+                      uti_email = :uti_email
+                  WHERE uti_id = :uti_id';
 
         $updateUser = $pdo->prepare($query);
 
         $updateUser->execute([
-            'nomUser' => $_POST["nom"],
-            'prenomUser' => $_POST["prenom"],
-            'emailUser' => $_POST["email"],
-            'passWordUser' => $_POST["mot_de_passe"],
-            'id' => $_SESSION["utilisateur"]->id
+            'uti_nom'        => $_POST["nom"],
+            'uti_prenom'     => $_POST["prenom"],
+            'uti_email'      => $_POST["email"],
+            'uti_motdepasse' => $_POST["mot_de_passe"],
+            'uti_id'         => $_SESSION["utilisateur"]->uti_id
         ]);
 
     } catch (PDOException $e) {
@@ -129,12 +129,12 @@ function updateSession($pdo) {
 
     try {
 
-        $query = 'SELECT * FROM utilisateur WHERE id = :id';
+        $query = 'SELECT * FROM utilisateur WHERE uti_id = :uti_id';
 
         $selectUser = $pdo->prepare($query);
 
         $selectUser->execute([
-            'id' => $_SESSION["utilisateur"]->id
+            'uti_id' => $_SESSION["utilisateur"]->uti_id
         ]);
 
         $user = $selectUser->fetch(PDO::FETCH_OBJ);
@@ -158,14 +158,14 @@ function deleteUser($pdo) {
 
     try {
 
-        $id = $_SESSION["utilisateur"]->id;
+        $id = $_SESSION["utilisateur"]->uti_id;
 
         // Supprimer les tags liés aux recettes de l'utilisateur
         $queryTags = 'DELETE tag_recette 
                       FROM tag_recette
                       INNER JOIN recette 
-                      ON tag_recette.recetteId = recette.recetteId
-                      WHERE recette.utilisateurId = :id';
+                      ON tag_recette.tre_rec_id = recette.rec_id
+                      WHERE recette.rec_uti_id = :id';
 
         $deleteTags = $pdo->prepare($queryTags);
 
@@ -175,7 +175,7 @@ function deleteUser($pdo) {
 
 
         // Supprimer les recettes
-        $queryRecettes = 'DELETE FROM recette WHERE utilisateurId = :id';
+        $queryRecettes = 'DELETE FROM recette WHERE rec_uti_id = :id';
 
         $deleteRecettes = $pdo->prepare($queryRecettes);
 
@@ -185,7 +185,7 @@ function deleteUser($pdo) {
 
 
         // Supprimer l'utilisateur
-        $queryUser = 'DELETE FROM utilisateur WHERE id = :id';
+        $queryUser = 'DELETE FROM utilisateur WHERE uti_id = :id';
 
         $deleteUser = $pdo->prepare($queryUser);
 
@@ -219,9 +219,9 @@ function getAllUtilisateurs($pdo) {
 
     try {
 
-        $query = 'SELECT id, nomUser, prenomUser, loginUser, role, emailUser, estSuspendu
+        $query = 'SELECT uti_id, uti_nom, uti_prenom, uti_login, uti_role, uti_email, uti_est_suspendu
                   FROM utilisateur 
-                  ORDER BY id';
+                  ORDER BY uti_id';
 
         $getAllUtilisateurs = $pdo->prepare($query);
         $getAllUtilisateurs->execute();
@@ -248,8 +248,8 @@ function suspendreUtilisateur($pdo, $id) {
     try {
 
         $query = 'UPDATE utilisateur 
-                  SET estSuspendu = 1 
-                  WHERE id = :id';
+                  SET uti_est_suspendu = 1 
+                  WHERE uti_id = :id';
 
         $suspendreUser = $pdo->prepare($query);
 
@@ -277,8 +277,8 @@ function reactiverUtilisateur($pdo, $id) {
     try {
 
         $query = 'UPDATE utilisateur 
-                  SET estSuspendu = 0 
-                  WHERE id = :id';
+                  SET uti_est_suspendu = 0 
+                  WHERE uti_id = :id';
 
         $reactiverUser = $pdo->prepare($query);
 
@@ -305,7 +305,7 @@ function getStatutSuspension($pdo, $id) {
 
     try {
 
-        $query = 'SELECT estSuspendu FROM utilisateur WHERE id = :id';
+        $query = 'SELECT uti_est_suspendu FROM utilisateur WHERE uti_id = :id';
 
         $getStatut = $pdo->prepare($query);
 
@@ -316,7 +316,7 @@ function getStatutSuspension($pdo, $id) {
         $user = $getStatut->fetch(PDO::FETCH_OBJ);
 
         if ($user) {
-            return $user->estSuspendu;
+            return $user->uti_est_suspendu;
         } else {
             return null;
         }
@@ -338,7 +338,7 @@ function verifAdmin($pdo, $userId) {
 
     try {
 
-        $query = 'SELECT role FROM utilisateur WHERE id = :id';
+        $query = 'SELECT uti_role FROM utilisateur WHERE uti_id = :id';
 
         $verifAdmin = $pdo->prepare($query);
 
@@ -348,7 +348,7 @@ function verifAdmin($pdo, $userId) {
 
         $user = $verifAdmin->fetch(PDO::FETCH_OBJ);
 
-        if ($user && $user->role === 'admin') {
+        if ($user && $user->uti_role === 'admin') {
             return true;
         } else {
             return false;
@@ -373,7 +373,7 @@ function countRecettesByUser($pdo, $userId) {
 
         $query = 'SELECT COUNT(*) as total 
                   FROM recette 
-                  WHERE utilisateurId = :userId';
+                  WHERE rec_uti_id = :userId';
 
         $countRecettes = $pdo->prepare($query);
 
@@ -428,9 +428,9 @@ function verifEmptyData() {
 
 function promouvoirModerateur($pdo, $id) {
     try {
-        $query = 'UPDATE utilisateur SET role = :role WHERE id = :id';
+        $query = 'UPDATE utilisateur SET uti_role = :uti_role WHERE uti_id = :id';
         $stmt = $pdo->prepare($query);
-        $stmt->execute(['role' => 'moderateur', 'id' => $id]);
+        $stmt->execute(['uti_role' => 'moderateur', 'id' => $id]);
         return true;
     } catch (PDOException $e) {
         die($e->getMessage());
@@ -439,9 +439,9 @@ function promouvoirModerateur($pdo, $id) {
 
 function retrograderUtilisateur($pdo, $id) {
     try {
-        $query = 'UPDATE utilisateur SET role = :role WHERE id = :id';
+        $query = 'UPDATE utilisateur SET uti_role = :uti_role WHERE uti_id = :id';
         $stmt = $pdo->prepare($query);
-        $stmt->execute(['role' => 'user', 'id' => $id]);
+        $stmt->execute(['uti_role' => 'user', 'id' => $id]);
         return true;
     } catch (PDOException $e) {
         die($e->getMessage());
@@ -454,7 +454,7 @@ function retrograderUtilisateur($pdo, $id) {
 function getUserById($pdo, $id)
 {
     try {
-        $query = 'SELECT * FROM utilisateur WHERE id = :id';
+        $query = 'SELECT * FROM utilisateur WHERE uti_id = :id';
         $stmt = $pdo->prepare($query);
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_OBJ);
