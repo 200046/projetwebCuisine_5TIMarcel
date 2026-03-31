@@ -35,7 +35,7 @@ CREATE TABLE recette (
   rec_etapes TEXT NOT NULL,
   rec_temps_preparation INT NOT NULL,
   rec_difficulte VARCHAR(25) NOT NULL,
-  rec_image VARCHAR(255),
+  rec_image VARCHAR(255) NOT NULL DEFAULT 'https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',
   rec_uti_id INT, -- Préfixe + nom explicite 
   rec_cat_id INT,
   FOREIGN KEY (rec_uti_id) REFERENCES utilisateur(uti_id),
@@ -99,28 +99,28 @@ INSERT INTO tag (tag_nom) VALUES
 -- RECETTES (20)
 -- =========================
 INSERT INTO recette 
-(rec_titre, rec_description, rec_ingredients, rec_etapes, rec_temps_preparation, rec_difficulte, rec_uti_id, rec_cat_id) VALUES
+(rec_titre, rec_description, rec_ingredients, rec_etapes, rec_temps_preparation, rec_difficulte, rec_image, rec_uti_id, rec_cat_id) VALUES
 
-('Pâtes carbo','Classique italienne','pâtes,lardons,crème','cuire,mélanger',20,'facile',1,11),
-('Salade César','Fraîche et rapide','salade,poulet,parmesan','mélanger',15,'facile',2,14),
-('Burger maison','Délicieux burger','pain,steak,salade','cuire,assembler',25,'moyen',3,19),
-('Pizza margarita','Simple','pâte,tomate,mozza','cuire',30,'facile',4,17),
-('Soupe légumes','Healthy','légumes,eau','cuire,mixer',40,'facile',5,15),
-('Tiramisu','Dessert italien','mascarpone,café','monter',35,'moyen',6,3),
-('Crêpes','Classique','farine,lait,oeufs','mélanger,cuire',20,'facile',7,10),
-('Omelette','Rapide','oeufs,sel','cuire',10,'facile',8,7),
-('Poulet rôti','Savoureux','poulet,épices','cuire',60,'moyen',9,12),
-('Sushi','Japonais','riz,poisson','assembler',50,'difficile',10,18),
-('Tacos','Mexicain','tortilla,viande','assembler',20,'facile',11,19),
-('Lasagnes','Italien','pâtes,bolognaise','cuire',70,'moyen',12,17),
-('Smoothie','Boisson fruitée','fruits,lait','mixer',5,'facile',13,4),
-('Salade fruits','Frais','fruits','couper',10,'facile',14,3),
-('Steak frites','Classique','viande,pommes','cuire',30,'facile',15,12),
-('Quiche','Maison','oeufs,crème','cuire',45,'moyen',16,2),
-('Ramen','Asiatique','nouilles,bouillon','cuire',50,'moyen',17,18),
-('Wrap','Snack','tortilla,poulet','assembler',15,'facile',18,9),
-('Brownie','Chocolat','chocolat,farine','cuire',35,'facile',19,3),
-('Glace maison','Dessert froid','lait,sucre','congeler',120,'moyen',20,3);
+('Pâtes carbo','Classique italienne','pâtes,lardons,crème','cuire,mélanger',20,'facile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',1,11),
+('Salade César','Fraîche et rapide','salade,poulet,parmesan','mélanger',15,'facile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',2,14),
+('Burger maison','Délicieux burger','pain,steak,salade','cuire,assembler',25,'moyen','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',3,19),
+('Pizza margarita','Simple','pâte,tomate,mozza','cuire',30,'facile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',4,17),
+('Soupe légumes','Healthy','légumes,eau','cuire,mixer',40,'facile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',5,15),
+('Tiramisu','Dessert italien','mascarpone,café','monter',35,'moyen','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',6,3),
+('Crêpes','Classique','farine,lait,oeufs','mélanger,cuire',20,'facile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',7,10),
+('Omelette','Rapide','oeufs,sel','cuire',10,'facile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',8,7),
+('Poulet rôti','Savoureux','poulet,épices','cuire',60,'moyen','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',9,12),
+('Sushi','Japonais','riz,poisson','assembler',50,'difficile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',10,18),
+('Tacos','Mexicain','tortilla,viande','assembler',20,'facile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',11,19),
+('Lasagnes','Italien','pâtes,bolognaise','cuire',70,'moyen','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',12,17),
+('Smoothie','Boisson fruitée','fruits,lait','mixer',5,'facile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',13,4),
+('Salade fruits','Frais','fruits','couper',10,'facile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',14,3),
+('Steak frites','Classique','viande,pommes','cuire',30,'facile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',15,12),
+('Quiche','Maison','oeufs,crème','cuire',45,'moyen','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',16,2),
+('Ramen','Asiatique','nouilles,bouillon','cuire',50,'moyen','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',17,18),
+('Wrap','Snack','tortilla,poulet','assembler',15,'facile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',18,9),
+('Brownie','Chocolat','chocolat,farine','cuire',35,'facile','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',19,3),
+('Glace maison','Dessert froid','lait,sucre','congeler',120,'moyen','https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',20,3);
 
 -- =========================
 -- TAG_RECETTE (20+)
