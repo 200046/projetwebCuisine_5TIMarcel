@@ -36,7 +36,7 @@ CREATE TABLE recette (
   rec_temps_preparation INT NOT NULL,
   rec_difficulte VARCHAR(25) NOT NULL,
   rec_image VARCHAR(255) NOT NULL DEFAULT 'https://cache.marieclaire.fr/data/photo/w1000_ci/61/meilleures-recettes-du-monde.jpg',
-  rec_uti_id INT, -- Préfixe + nom explicite 
+  rec_uti_id INT,
   rec_cat_id INT,
   FOREIGN KEY (rec_uti_id) REFERENCES utilisateur(uti_id),
   FOREIGN KEY (rec_cat_id) REFERENCES categorie(cat_id)
