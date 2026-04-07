@@ -10,17 +10,14 @@
                 <li><a href="administration" id="navBarINDEX">👑 Admin</a></li>
                 <li><a href="gestionCategories" id="navBarCATEGORIE">🗂️ Catégories</a></li>
                 <li><a href="gestionTags" id="navBarTAG">🏷️ Tags</a></li>
-                
+
             <?php elseif ($_SESSION['utilisateur']->uti_role === 'moderateur'): ?>
                 <li><a href="moderation" id="navBarModerateur">🛡️ Modération</a></li>
             <?php endif; ?>
 
             <li class="navbar-user">
-                <span id="navBarPrenom">👤 <?= htmlspecialchars($_SESSION['utilisateur']->uti_prenom) ?></span>
-                <ul class="dropdown">
-                    <li><a href="profil" id="navBarProfil">💎 Mon profil</a></li>
-                    <li><a href="deconnexion" id="navBarLogout">🚪 Déconnexion</a></li>
-                </ul>
+                <a href="profil"><span id="navBarPrenom">👤 <?= htmlspecialchars($_SESSION['utilisateur']->uti_prenom) ?> - Mon profil</span></a>
+            <li><a href="deconnexion" id="navBarLogout">🚪 Déconnexion</a></li>
             </li>
         <?php else : ?>
             <li><a href="inscription" id="navBarInscription">📝 S'inscrire</a></li>
