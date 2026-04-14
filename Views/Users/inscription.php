@@ -1,7 +1,8 @@
 <div class="container">
     <h1>Inscription</h1>
-
-    <?php if (isset($messageError)): ?>
+    <div id="formError" class="alert alert-danger" style="display:none;">
+        
+    </div> <?php if (isset($messageError)): ?>
         <div class="alert alert-danger">
             <?= $messageError ?>
         </div>
@@ -30,12 +31,12 @@
 
         <div class="mb-3 position-relative">
             <label for="mot_de_passe" class="form-label">Mot de passe</label>
-            
-            <input type="password" 
-                   class="form-control password-input" 
-                   id="mot_de_passe" 
-                   name="mot_de_passe" 
-                   required>
+
+            <input type="password"
+                class="form-control password-input"
+                id="mot_de_passe"
+                name="mot_de_passe"
+                required>
             <button type="button" class="toggle-password">👁️</button>
         </div>
 

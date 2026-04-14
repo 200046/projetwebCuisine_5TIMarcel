@@ -12,10 +12,10 @@
             <strong>Erreur !</strong> <?= $error ?>
         </div>
     <?php endif; ?>
-
     <form method="post" action="">
         <fieldset>
             <legend>Se connecter</legend>
+            <div id="formError" class="alert alert-danger" style="display:none;"></div>
 
             <div class="mb-3">
                 <label for="login" class="form-label">Login</label>

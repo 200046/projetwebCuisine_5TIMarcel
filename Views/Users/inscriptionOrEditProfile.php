@@ -2,7 +2,7 @@
     <form method="post" action="">
         <fieldset>
             <legend><?= isset($_SESSION['utilisateur']) ? 'Modifier mon profil' : 'Inscription' ?></legend>
-
+<div id="formError" class="alert alert-danger" style="display:none;"></div>
             <div class="mb-3">
                 <label for="nom" class="form-label">Nom</label>
                 <input type="text" placeholder="Votre nom" class="form-control" id="nom" name="nom" required
