@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 // ============================================
 // FONCTIONS D'AUTHENTIFICATION ET UTILISATEURS
@@ -7,7 +7,8 @@
 // -----------------------------
 // Connexion utilisateur
 // -----------------------------
-function connectUser($pdo) {
+function connectUser($pdo)
+{
 
     $errors = verifEmptyData();
 
@@ -33,15 +34,14 @@ function connectUser($pdo) {
         if (!$user) {
             return false;
         }
-        
+
         // Vérifier si le compte est suspendu
         if ($user->uti_est_suspendu == 1) {
             return "suspendu";
         }
-        
+
         $_SESSION["utilisateur"] = $user;
         return true;
-
     } catch (PDOException $e) {
         $message = $e->getMessage();
         die($message);
@@ -52,7 +52,8 @@ function connectUser($pdo) {
 // -----------------------------
 // Création d'un utilisateur
 // -----------------------------
-function createUser($pdo) {
+function createUser($pdo)
+{
 
     $errors = verifEmptyData();
 
@@ -79,12 +80,10 @@ function createUser($pdo) {
         ]);
 
         return true;
-
     } catch (PDOException $e) {
 
         $message = $e->getMessage();
         die($message);
-
     }
 }
 
@@ -92,7 +91,8 @@ function createUser($pdo) {
 // -----------------------------
 // Modifier un utilisateur
 // -----------------------------
-function updateUser($pdo) {
+function updateUser($pdo)
+{
 
     try {
 
@@ -112,12 +112,10 @@ function updateUser($pdo) {
             'uti_motdepasse' => $_POST["mot_de_passe"],
             'uti_id'         => $_SESSION["utilisateur"]->uti_id
         ]);
-
     } catch (PDOException $e) {
 
         $message = $e->getMessage();
         die($message);
-
     }
 }
 
@@ -125,7 +123,8 @@ function updateUser($pdo) {
 // -----------------------------
 // Mettre à jour la session utilisateur
 // -----------------------------
-function updateSession($pdo) {
+function updateSession($pdo)
+{
 
     try {
 
@@ -140,21 +139,36 @@ function updateSession($pdo) {
         $user = $selectUser->fetch(PDO::FETCH_OBJ);
 
         $_SESSION["utilisateur"] = $user;
-
     } catch (PDOException $e) {
 
         $message = $e->getMessage();
         die($message);
-
     }
-
 }
 
+
+function deleteUserById($pdo, $id)
+{
+    try {
+        $queryTags = 'DELETE tags_recettes FROM tags_recettes
+                      INNER JOIN recettes ON tags_recettes.tre_rec_id = recettes.rec_id
+                      WHERE recettes.rec_uti_id = :id';
+        $pdo->prepare($queryTags)->execute(['id' => $id]);
+
+        $pdo->prepare('DELETE FROM recettes WHERE rec_uti_id = :id')->execute(['id' => $id]);
+        $pdo->prepare('DELETE FROM utilisateurs WHERE uti_id = :id')->execute(['id' => $id]);
+
+        return true;
+    } catch (PDOException $e) {
+        die($e->getMessage());
+    }
+}
 
 // -----------------------------
 // Supprimer un utilisateur
 // -----------------------------
-function deleteUser($pdo) {
+function deleteUser($pdo)
+{
     try {
         $id = $_SESSION["utilisateur"]->uti_id;
 
@@ -180,7 +194,6 @@ function deleteUser($pdo) {
 
         session_unset();
         session_destroy();
-
     } catch (PDOException $e) {
         die($e->getMessage());
     }
@@ -194,7 +207,8 @@ function deleteUser($pdo) {
 // -----------------------------
 // Récupérer tous les utilisateurs
 // -----------------------------
-function getAllUtilisateurs($pdo) {
+function getAllUtilisateurs($pdo)
+{
 
     try {
 
@@ -208,21 +222,19 @@ function getAllUtilisateurs($pdo) {
         $utilisateurs = $getAllUtilisateurs->fetchAll(PDO::FETCH_OBJ);
 
         return $utilisateurs;
-
     } catch (PDOException $e) {
 
         $message = $e->getMessage();
         die($message);
-
     }
-
 }
 
 
 // -----------------------------
 // Suspendre un utilisateur
 // -----------------------------
-function suspendreUtilisateur($pdo, $id) {
+function suspendreUtilisateur($pdo, $id)
+{
 
     try {
 
@@ -237,21 +249,19 @@ function suspendreUtilisateur($pdo, $id) {
         ]);
 
         return true;
-
     } catch (PDOException $e) {
 
         $message = $e->getMessage();
         die($message);
-
     }
-
 }
 
 
 // -----------------------------
 // Réactiver un utilisateur
 // -----------------------------
-function reactiverUtilisateur($pdo, $id) {
+function reactiverUtilisateur($pdo, $id)
+{
 
     try {
 
@@ -266,21 +276,19 @@ function reactiverUtilisateur($pdo, $id) {
         ]);
 
         return true;
-
     } catch (PDOException $e) {
 
         $message = $e->getMessage();
         die($message);
-
     }
-
 }
 
 
 // -----------------------------
 // Récupérer le statut de suspension
 // -----------------------------
-function getStatutSuspension($pdo, $id) {
+function getStatutSuspension($pdo, $id)
+{
 
     try {
 
@@ -299,21 +307,19 @@ function getStatutSuspension($pdo, $id) {
         } else {
             return null;
         }
-
     } catch (PDOException $e) {
 
         $message = $e->getMessage();
         die($message);
-
     }
-
 }
 
 
 // -----------------------------
 // Vérifier si l'utilisateur est admin
 // -----------------------------
-function verifAdmin($pdo, $userId) {
+function verifAdmin($pdo, $userId)
+{
 
     try {
 
@@ -332,21 +338,19 @@ function verifAdmin($pdo, $userId) {
         } else {
             return false;
         }
-
     } catch (PDOException $e) {
 
         $message = $e->getMessage();
         die($message);
-
     }
-
 }
 
 
 // -----------------------------
 // Compter les recettes d'un utilisateur
 // -----------------------------
-function countRecettesByUser($pdo, $userId) {
+function countRecettesByUser($pdo, $userId)
+{
 
     try {
 
@@ -363,14 +367,11 @@ function countRecettesByUser($pdo, $userId) {
         $result = $countRecettes->fetch(PDO::FETCH_OBJ);
 
         return $result->total;
-
     } catch (PDOException $e) {
 
         $message = $e->getMessage();
         die($message);
-
     }
-
 }
 
 
@@ -381,20 +382,18 @@ function countRecettesByUser($pdo, $userId) {
 // -----------------------------
 // Vérification des champs vides
 // -----------------------------
-function verifEmptyData() {
+function verifEmptyData()
+{
 
-    foreach($_POST as $key => $value) {
+    foreach ($_POST as $key => $value) {
 
         if ($key != 'btnEnvoi') {
 
             if (str_replace(' ', '', $value) == '') {
 
                 $messageError[$key] = "Votre " . $key . " est vide";
-
             }
-
         }
-
     }
 
     if (isset($messageError)) {
@@ -402,10 +401,10 @@ function verifEmptyData() {
     } else {
         return false;
     }
-
 }
 
-function promouvoirModerateur($pdo, $id) {
+function promouvoirModerateur($pdo, $id)
+{
     try {
         $query = 'UPDATE utilisateurs SET uti_role = :uti_role WHERE uti_id = :id';
         $stmt = $pdo->prepare($query);
@@ -416,7 +415,8 @@ function promouvoirModerateur($pdo, $id) {
     }
 }
 
-function retrograderUtilisateur($pdo, $id) {
+function retrograderUtilisateur($pdo, $id)
+{
     try {
         $query = 'UPDATE utilisateurs SET uti_role = :uti_role WHERE uti_id = :id';
         $stmt = $pdo->prepare($query);

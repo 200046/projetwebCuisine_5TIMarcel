@@ -5,28 +5,28 @@
 
             <div class="mb-3">
                 <label class="form-label">Titre</label>
-                <input type="text" name="titre" class="form-control"
+                <input type="text" name="titre" class="form-control" required
                 <?php if(isset($recette)) : ?> value="<?= htmlspecialchars($recette->rec_titre) ?>" <?php endif ?>>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Description</label>
-                <textarea name="description" class="form-control"><?php if(isset($recette)) echo htmlspecialchars($recette->rec_description); ?></textarea>
+                <textarea name="description" class="form-control" required><?php if(isset($recette)) echo htmlspecialchars($recette->rec_description); ?></textarea>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Ingrédients</label>
-                <textarea name="ingredients" class="form-control"><?php if(isset($recette)) echo htmlspecialchars($recette->rec_ingredients); ?></textarea>
+                <textarea name="ingredients" class="form-control" required><?php if(isset($recette)) echo htmlspecialchars($recette->rec_ingredients); ?></textarea>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Étapes</label>
-                <textarea name="etapes" class="form-control"><?php if(isset($recette)) echo htmlspecialchars($recette->rec_etapes); ?></textarea>
+                <textarea name="etapes" class="form-control" required><?php if(isset($recette)) echo htmlspecialchars($recette->rec_etapes); ?></textarea>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Temps préparation (min)</label>
-                <input type="number" name="temps_preparation" class="form-control"
+                <input type="number" name="temps_preparation" class="form-control" required
                 <?php if(isset($recette)) : ?> value="<?= (int)$recette->rec_temps_preparation ?>" <?php endif ?>>
             </div>
 
@@ -41,7 +41,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Image (url)</label>
-                <input type="text" name="image" class="form-control"
+                <input type="text" name="image" class="form-control" required
                 <?php if(isset($recette)) : ?> value="<?= htmlspecialchars($recette->rec_image) ?>" <?php endif ?>>
             </div>
 

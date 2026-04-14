@@ -657,3 +657,45 @@ select option { background: #262626; color: #f0ece4; }
 
 /* Déconnexion - Rouge Velours */
 #navBarLogout      { color: #ef9a9a; }
+
+.form-masse {
+    background: none;
+    padding: 0;
+    margin: 0;
+    max-width: none;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+}
+
+.bulk-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.bulk-actions select {
+    width: auto;
+    margin-bottom: 0;
+    padding: 9px 14px;
+    height: 40px;
+}
+
+.bulk-actions .btn-masse {
+    height: 40px;
+    padding: 0 20px;
+    background: #f0a500;
+    color: #141414;
+    border: none;
+    border-radius: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.25s ease;
+    white-space: nowrap;
+}
+
+.bulk-actions .btn-masse:hover {
+    background: #c48600;
+}

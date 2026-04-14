@@ -28,7 +28,27 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
     $message = null;
     $messageType = null;
 
-    // Gestion des actions sur les utilisateurs
+    // Actions en masse (POST)
+    if (isset($_POST['action_masse']) && isset($_POST['utilisateurs_selectionnes'])) {
+        $ids = array_map('intval', $_POST['utilisateurs_selectionnes']);
+        $action_masse = $_POST['action_masse'];
+
+        foreach ($ids as $id) {
+            if ($id == $_SESSION["utilisateur"]->uti_id) continue;
+
+            if ($action_masse === 'suspendre_masse') {
+                suspendreUtilisateur($pdo, $id);
+            } elseif ($action_masse === 'reactiver_masse') {
+                reactiverUtilisateur($pdo, $id);
+            } elseif ($action_masse === 'supprimer_masse') {
+                deleteUserById($pdo, $id);
+            }
+        }
+        header("Location: /administration");
+        exit();
+    }
+
+    // Actions unitaires (GET)
     if (isset($_GET['action']) && isset($_GET['uti_id'])) {
         $action = $_GET['action'];
         $id = (int)$_GET['uti_id'];
@@ -45,6 +65,8 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
                 promouvoirModerateur($pdo, $id);
             } elseif ($action === 'retrograder') {
                 retrograderUtilisateur($pdo, $id);
+            } elseif ($action === 'supprimer') {
+                deleteUserById($pdo, $id);
             }
             header("Location: /administration");
             exit();
@@ -56,9 +78,9 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
 
     foreach ($utilisateurs as $user) {
         $utilisateursData[] = [
-            'user' => $user,
+            'user'             => $user,
             'uti_est_suspendu' => $user->uti_est_suspendu,
-            'nbRecettes' => countRecettesByUser($pdo, $user->uti_id) 
+            'nbRecettes'       => countRecettesByUser($pdo, $user->uti_id)
         ];
     }
 
@@ -72,6 +94,7 @@ if ($uri === "/administration" || str_starts_with($uri, "/administration?")) {
 |--------------------------------------------------------------------------
 */
 elseif ($uri === "/moderation") {
+
     if (!isset($_SESSION["utilisateur"])) {
         header("Location: /connexion");
         exit();
@@ -87,9 +110,9 @@ elseif ($uri === "/moderation") {
 
     foreach ($utilisateurs as $user) {
         $utilisateursData[] = [
-            'user' => $user,
+            'user'             => $user,
             'uti_est_suspendu' => $user->uti_est_suspendu,
-            'nbRecettes' => countRecettesByUser($pdo, $user->uti_id)
+            'nbRecettes'       => countRecettesByUser($pdo, $user->uti_id)
         ];
     }
 
@@ -115,8 +138,8 @@ elseif (str_starts_with($uri, "/admVoirUser") && isset($_GET['uti_id'])) {
     // Action : suppression d'une recette depuis la vue détail
     if (isset($_GET['action']) && $_GET['action'] === 'supprimerRecette' && isset($_GET['rec_id'])) {
         $rec_id = (int)$_GET['rec_id'];
-        deleteTagsRecette($pdo, $rec_id); // Nettoyage table pivot tags_recettes
-        deleteOneRecette($pdo);           // Suppression table recettes
+        deleteTagsRecette($pdo, $rec_id);
+        deleteOneRecette($pdo, $rec_id); // Correction du bug : $rec_id manquant
         header("Location: /admVoirUser?uti_id=" . $target_uti_id);
         exit();
     }
@@ -135,6 +158,7 @@ elseif (str_starts_with($uri, "/admVoirUser") && isset($_GET['uti_id'])) {
 |--------------------------------------------------------------------------
 */
 elseif ($uri === "/gestionTags" || str_starts_with($uri, "/gestionTags?")) {
+
     if (!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']->uti_role !== 'admin') {
         header("Location: /");
         exit();
@@ -180,6 +204,7 @@ elseif ($uri === "/gestionTags" || str_starts_with($uri, "/gestionTags?")) {
 |--------------------------------------------------------------------------
 */
 elseif ($uri === "/gestionCategories" || str_starts_with($uri, "/gestionCategories?")) {
+
     if (!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']->uti_role !== 'admin') {
         header("Location: /");
         exit();
