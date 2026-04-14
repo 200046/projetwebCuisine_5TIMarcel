@@ -28,9 +28,15 @@
             <input type="text" class="form-control" id="login" name="login" required>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 position-relative">
             <label for="mot_de_passe" class="form-label">Mot de passe</label>
-            <input type="password" class="form-control" id="mot_de_passe" name="mot_de_passe" required>
+            
+            <input type="password" 
+                   class="form-control password-input" 
+                   id="mot_de_passe" 
+                   name="mot_de_passe" 
+                   required>
+            <button type="button" class="toggle-password">👁️</button>
         </div>
 
         <button type="submit" name="btnEnvoi" class="btn btn-primary">S'inscrire</button>

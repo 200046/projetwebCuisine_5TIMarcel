@@ -699,3 +699,35 @@ select option { background: #262626; color: #f0ece4; }
 .bulk-actions .btn-masse:hover {
     background: #c48600;
 }
+
+.toggle-password {
+    position: absolute;
+    top: 38px;
+    right: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.toggle-password:focus {
+    outline: none;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 10;
+}
+
+.navbar a.active {
+    color: #ff9800;
+    font-weight: bold;
+    border-bottom: 2px solid #ff9800;
+}

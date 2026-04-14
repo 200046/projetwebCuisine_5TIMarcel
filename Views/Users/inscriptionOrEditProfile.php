@@ -27,10 +27,18 @@
                 <?php if (isset($_SESSION['utilisateur'])) : ?>value="<?= htmlspecialchars($_SESSION['utilisateur']->uti_login) ?>" <?php endif ?>>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3 position-relative">
                 <label for="mot_de_passe" class="form-label">Mot de passe</label>
-                <input type="password" placeholder="Mot de passe" class="form-control" id="mot_de_passe" name="mot_de_passe" required
+                
+                <input type="password" 
+                       placeholder="Mot de passe" 
+                       class="form-control password-input" 
+                       id="mot_de_passe" 
+                       name="mot_de_passe" 
+                       required
                 <?php if (isset($_SESSION['utilisateur'])) : ?>value="<?= htmlspecialchars($_SESSION['utilisateur']->uti_motdepasse) ?>" <?php endif ?>>
+
+                <button type="button" class="toggle-password">👁️</button>
             </div>
 
             <div class="flex space-between mt-3">
