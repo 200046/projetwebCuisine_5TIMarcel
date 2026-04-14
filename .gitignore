@@ -11,3 +11,6 @@ Thumbs.db
 # Fichiers de log ou dossiers de backup
 *.log
 backup/
+
+# Excel : 
+~$Grille_projet.xlsx
