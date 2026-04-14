@@ -1,7 +1,3 @@
-# Scripts utilitaires de migration et commentaires
-commentaire.php
-undoCommentaire.php
-
 # Fichiers système et IDE (recommandé)
 .DS_Store
 Thumbs.db
